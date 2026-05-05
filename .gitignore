@@ -216,3 +216,26 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Environment variables - never commit this
+.env
+
+# SQLite database - runtime data, not source code
+*.db
+*.sqlite
+*.sqlite3
+
+# Flask session files
+flask_session/
+
+# IDE specific
+.vscode/
+.idea/
+
+# OS files
+.DS_Store        # Mac
+Thumbs.db        # Windows
+
+# MQTT
+mosquitto.log
+.streamlit/secrets.toml
