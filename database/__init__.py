@@ -6,19 +6,24 @@ correct order automatically
 """
 
 from database_setup import DatabaseSetup
-from database.job_seelers_database import JobSeekerDatabase
-from database.employers_database import EmployerDatabase
-
-
-
+from database.users_database import UsersDatabase
+from database.job_seekers_database import JobSeekersDatabase
+from database.employers_database import EmployersDatabase
+from database.job_listings_database import JobListingsDatabase
+from database.applications_database import ApplicationsDatabase
+ 
+ 
 class DatabaseManager:
     def __init__(self, db_path):
         self.connection = DatabaseSetup(db_path)
         conn = self.connection.get()
-
+ 
         # Order matters — tables with foreign keys must come after their dependencies
-        self.users     = JobSeekerDatabase(conn)
-        self.users     = EmployerDatabase(conn)
-
+        self.users        = UsersDatabase(conn)
+        self.job_seekers  = JobSeekersDatabase(conn)
+        self.employers    = EmployersDatabase(conn)
+        self.job_listings = JobListingsDatabase(conn)
+        self.applications = ApplicationsDatabase(conn)
+ 
     def close(self):
         self.connection.close()
