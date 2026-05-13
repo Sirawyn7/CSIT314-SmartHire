@@ -145,3 +145,155 @@ main {
 .footer-links a:hover {
   color: #2563eb;
 }
+
+
+/* ── Auth Pages (login, register, forgot password) ── */
+
+/* light blue background applied to the full page area beneath the navbar */
+main:has(.auth-card) {
+  background-color: #dce8fb;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+/* white rounded card that contains the auth form */
+.auth-card {
+  background-color: #ffffff;
+  border-radius: 16px;
+  padding: 2.5rem 2rem;
+  width: 100%;
+  max-width: 480px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+/* bold page title at the top of the auth card */
+.auth-title {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #0f1f5c;
+  text-align: center;
+  margin: 0 0 0.25rem 0;
+}
+
+/* muted subtitle beneath the title */
+.auth-subtitle {
+  font-size: 0.88rem;
+  color: #6b7280;
+  text-align: center;
+  margin: 0 0 1.25rem 0;
+}
+
+/* wraps each label and input pair with spacing between fields */
+.auth-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-bottom: 1rem;
+}
+
+/* label text above each input */
+.auth-label {
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: #111827;
+}
+
+/* positions the icon and optional toggle button relative to the input */
+.auth-input-wrapper {
+  display: flex;
+  align-items: center;
+  background-color: #ffffff;
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  padding: 0 0.75rem;
+  gap: 0.5rem;
+}
+
+/* icon on the left side of each input field */
+.auth-icon {
+  font-size: 0.95rem;
+  color: #6b7280;
+  flex-shrink: 0;
+}
+
+/* the text/email/password input itself */
+.auth-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  padding: 0.75rem 0;
+  font-size: 0.92rem;
+  font-family: 'DM Sans', sans-serif;
+  color: #111827;
+  background: transparent;
+}
+
+/* show/hide password toggle button on the right of the password field */
+.auth-toggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  color: #6b7280;
+  padding: 0;
+  flex-shrink: 0;
+}
+
+/* primary submit button */
+.auth-btn {
+  width: 100%;
+  padding: 0.9rem;
+  background-color: #0f1f5c;
+  color: #ffffff;
+  font-size: 1rem;
+  font-weight: 700;
+  font-family: 'DM Sans', sans-serif;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  margin: 0.75rem 0;
+  transition: background-color 0.2s ease;
+}
+
+/* darkens the submit button on hover */
+.auth-btn:hover {
+  background-color: #1a2f7a;
+}
+
+/* muted grey link used for forgot password */
+.auth-link-muted {
+  text-align: center;
+  font-size: 0.88rem;
+  color: #6b7280;
+  text-decoration: none;
+  display: block;
+  margin-top: 0.25rem;
+}
+
+.auth-link-muted:hover {
+  color: #2563eb;
+}
+
+/* footer text beneath the form e.g. "Don't have an account?" */
+.auth-footer {
+  text-align: center;
+  font-size: 0.88rem;
+  color: #374151;
+  margin-top: 0.5rem;
+}
+
+/* blue inline link used for Sign up / Log in cross-links */
+.auth-link {
+  color: #2563eb;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.auth-link:hover {
+  text-decoration: underline;
+}
