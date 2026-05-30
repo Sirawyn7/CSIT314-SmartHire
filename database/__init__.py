@@ -5,7 +5,7 @@ Allows app.py to only import this file, with this handling instantiating the tab
 correct order automatically
 """
 
-from database_setup import DatabaseSetup
+from database.database_setup import DatabaseSetup
 from database.users_database import UsersDatabase
 from database.job_seekers_database import JobSeekersDatabase
 from database.employers_database import EmployersDatabase
