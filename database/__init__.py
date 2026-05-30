@@ -7,10 +7,11 @@ correct order automatically
 
 from database.database_setup import DatabaseSetup
 from database.users_database import UsersDatabase
-from database.job_seekers_database import JobSeekersDatabase
+from database.candidates_database import CandidatesDatabase
 from database.employers_database import EmployersDatabase
-from database.job_listings_database import JobListingsDatabase
+from database.jobs_database import JobsDatabase
 from database.applications_database import ApplicationsDatabase
+from database.members_database import MembersDatabase
  
  
 class DatabaseManager:
@@ -20,10 +21,11 @@ class DatabaseManager:
  
         # Order matters — tables with foreign keys must come after their dependencies
         self.users        = UsersDatabase(conn)
-        self.job_seekers  = JobSeekersDatabase(conn)
+        self.candidates   = CandidatesDatabase(conn)
         self.employers    = EmployersDatabase(conn)
-        self.job_listings = JobListingsDatabase(conn)
+        self.jobs         = JobsDatabase(conn)
         self.applications = ApplicationsDatabase(conn)
- 
+        self.memberships  = MembersDatabase(conn)
+    
     def close(self):
         self.connection.close()

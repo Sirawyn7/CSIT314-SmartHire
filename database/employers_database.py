@@ -11,12 +11,17 @@ class EmployersDatabase:
     def _create_table(self):
         self.conn.execute("""
             CREATE TABLE IF NOT EXISTS employers (
-                id           INTEGER PRIMARY KEY AUTOINCREMENT,
-                user_id      INTEGER NOT NULL UNIQUE,
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_id INTEGER NOT NULL,
                 company_name TEXT NOT NULL,
-                website      TEXT,
-                description  TEXT,
+                company_description TEXT,
+                industry TEXT,
+                location TEXT,
+                weburl TEXT,
+                contact_email TEXT,
+                source TEXT DEFAULT 'registered',
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 FOREIGN KEY (user_id) REFERENCES users(id)
-            );
+            )
         """)
         self.conn.commit()
