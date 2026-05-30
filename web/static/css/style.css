@@ -297,3 +297,137 @@ main:has(.auth-card) {
 .auth-link:hover {
   text-decoration: underline;
 }
+/* -------- HOME PAGE BANNER -------- */
+
+.carpark_section{
+    background: #4268e5;
+    height: 300px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    margin-bottom: 50px;
+    border-radius: 16px;
+}
+
+.carpark_text h1{
+    font-size: 4rem;
+    font-weight: 900;
+    color: white;
+    margin-bottom: 10px;
+}
+
+.carpark_text p{
+    font-size: 2rem;
+    font-weight: 700;
+    color: white;
+}
+
+
+/* -------- HOW IT WORKS -------- */
+
+.how_section{
+    max-width: 900px;
+    margin: 30px auto;
+}
+
+.how_section h1{
+    text-align: center;
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: #0f1f5c;
+    margin-bottom: 40px;
+}
+
+.how_box{
+    background: #ffffff;
+    padding: 25px;
+    margin-bottom: 20px;
+    border-radius: 14px;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.how_box h2{
+    margin-bottom: 10px;
+    color: #111827;
+}
+
+.how_box p{
+    color: #6b7280;
+}
+
+
+/* -------- PLATFORM FEATURES -------- */
+
+.product_section,
+.smartpark_section{
+    max-width: 1200px;
+    margin: 80px auto;
+    text-align: center;
+}
+
+.product_section h1,
+.smartpark_section h1{
+    font-size: 2rem;
+    font-weight: 800;
+    color: #1e2a78;
+    margin-bottom: 50px;
+}
+
+.product_container,
+.smartpark_container{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 25px;
+}
+
+.product_box,
+.smartpark_box{
+    background: white;
+    padding: 30px 20px;
+    border-radius: 16px;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.product_box h2,
+.smartpark_box h2{
+    color: #111827;
+    margin-bottom: 12px;
+}
+
+.product_box p,
+.smartpark_box p{
+    color: #6b7280;
+}
+
+
+/* -------- BOTTOM SECTION -------- */
+
+.palm_section{
+    max-width: 1200px;
+    margin: 80px auto;
+}
+
+.palm_box{
+    text-align: center;
+    justify-content: center;
+    background: #4268e5;
+    border-radius: 16px;
+    padding: 35px 50px;
+    display: flex;
+    align-items: center;
+}
+
+.palm_text h1{
+    font-size: 3rem;
+    font-weight: 800;
+    color: white;
+    margin-bottom: 10px;
+}
+
+.palm_text p{
+    font-size: 1.5rem;
+    color: white;
+}

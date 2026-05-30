@@ -21,7 +21,7 @@ class AuthRoutes:
         self.blueprint.add_url_rule("/api/auth/logout", view_func=self.logout, methods=["POST"])
 
     def base(self):
-        return render_template("base.html")
+        return render_template("home.html")
 
     def ping(self):
         return jsonify({"message": "Auth routes are working"}), 200
