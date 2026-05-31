@@ -12,10 +12,10 @@ class User:
     """Base class for all user types."""
 
     def __init__(self, data):
-        self.id         = data["id"]
-        self.email      = data["email"]
-        self.user_type  = data["user_type"]
-        self.is_member  = bool(data["is_member"])
+        self.email         = data["email"]
+        self.password_hash = data["password_hash"]
+        self.user_type     = data["user_type"]
+        self.is_member     = bool(data["is_member"])
 
     @staticmethod
     def create(user_row, db):
