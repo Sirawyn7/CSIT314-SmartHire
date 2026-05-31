@@ -13,6 +13,7 @@ from database.jobs_database import JobsDatabase
 from database.applications_database import ApplicationsDatabase
 from database.members_database import MembersDatabase
 from database.seeders.users_seeder import UsersSeeder
+from database.seeders.jobs_seeder import JobSeeder
  
  
 class DatabaseManager:
@@ -28,6 +29,7 @@ class DatabaseManager:
         self.memberships  = MembersDatabase(conn)
 
         self.users_seeder = UsersSeeder(self)
+        self.job_seeder   = JobSeeder(self)
 
     def close(self):
         self.connection.close()
