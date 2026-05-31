@@ -64,3 +64,10 @@ class EmployersDatabase:
             "SELECT COUNT(*) FROM employers WHERE source = ?", (source,)
         ).fetchone()
         return row[0]
+    
+    def get_all(self):
+        """Returns all employer rows as a list of dicts."""
+        rows = self.conn.execute(
+            "SELECT * FROM employers"
+        ).fetchall()
+        return [dict(row) for row in rows]
