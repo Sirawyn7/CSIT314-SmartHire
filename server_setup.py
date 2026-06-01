@@ -6,6 +6,7 @@ Flask Server Class
 from flask import Flask, jsonify
 from database import DatabaseManager
 from routes import route_classes
+from config import SECRET_KEY
 
 class Server:
 
@@ -30,6 +31,7 @@ class Server:
         self.db = DatabaseManager(db_path)
         self._register_routes()
         self._initialised = True
+        self.app.secret_key = SECRET_KEY
 
     def _register_routes(self):
         #Register debug function

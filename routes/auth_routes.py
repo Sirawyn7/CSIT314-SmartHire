@@ -19,7 +19,7 @@ class AuthRoutes:
         self.blueprint.add_url_rule("/login", view_func=self.login_page, methods=["GET"])
         self.blueprint.add_url_rule("/register", view_func=self.register_page, methods=["GET"])
         self.blueprint.add_url_rule("/forgot-password", view_func=self.forgot_password_page, methods=["GET"])
-        self.blueprint.add_url_rule("/api/auth/login", view_func=self.login, methods=["POST"])
+        self.blueprint.add_url_rule("/api/auth/login", view_func=self.login_post, methods=["POST"])
         self.blueprint.add_url_rule("/api/auth/register", view_func=self.register, methods=["POST"])
         self.blueprint.add_url_rule("/api/auth/forgot-password", view_func=self.forgot_password_submit, methods=["POST"])
         self.blueprint.add_url_rule("/api/auth/logout", view_func=self.logout, methods=["POST"])
