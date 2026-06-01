@@ -23,7 +23,11 @@ e.g. imports header, navigation, footer without explicit declaration in each fil
         <li><a href="/base" class="nav-link">Home</a></li>
         <li><a href="/how-it-works" class="nav-link">How it works</a></li>
       </ul>
-      <a href="/login" class="nav-cta">Login</a>
+      {% if session.get('user_id') %}
+        <a href="{{ url_for('auth.logout') }}" class="nav-cta">Logout</a>
+      {% else %}
+        <a href="{{ url_for('auth.login_page') }}" class="nav-cta">Login</a>
+      {% endif %}
     </div>
   </nav>
 
@@ -33,7 +37,7 @@ e.g. imports header, navigation, footer without explicit declaration in each fil
     </main>
 
 <!--contains the footer which holds 4 lists-->
- <footer class="footer">
+  <footer class="footer">
     <div class="footer-container">
       <div class="footer-col">
         <h4 class="footer-heading">Smart Hire</h4>

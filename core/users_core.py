@@ -39,9 +39,13 @@ class User:
         """Returns a bcrypt hash of the given password string."""
         return bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode()
 
-    def check_password(self, password):
-        """Returns True if the given password matches the stored bcrypt hash."""
-        return bcrypt.checkpw(password.encode(), self.password_hash.encode())
+    @staticmethod
+    def check_password(password, user_id, db):
+        """Returns True if the given password matches the stored hash for the user_id."""
+        password_hash = db.users.get_password_hash(user_id)
+        if not password_hash:
+            return False
+        return bcrypt.checkpw(password.encode(), password_hash.encode())
 
 
 class Candidate(User):
