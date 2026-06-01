@@ -66,3 +66,17 @@ class UsersDatabase:
             "SELECT * FROM users WHERE id = ?", (user_id,)
         ).fetchone()
         return dict(row) if row else None
+    
+    def get_by_email(self, email):
+        """Returns a user row as a dict matching the given email, or None if not found."""
+        row = self.conn.execute(
+            "SELECT * FROM users WHERE email = ?", (email,)
+        ).fetchone()
+        return dict(row) if row else None
+
+    def get_password_hash(self, user_id):
+        """Returns the password_hash string for the given user_id, or None if not found."""
+        row = self.conn.execute(
+            "SELECT password_hash FROM users WHERE id = ?", (user_id,)
+        ).fetchone()
+        return row["password_hash"] if row else None
