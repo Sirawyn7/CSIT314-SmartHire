@@ -70,3 +70,39 @@ class CandidatesDatabase:
             "SELECT COUNT(*) FROM candidates WHERE source = ?", (source,)
         ).fetchone()
         return row[0]
+    
+    def update_by_user_id(self, user_id, data):
+        """Updates a candidate profile by user_id."""
+        years_experience = data.get("years_experience")
+        if years_experience in (None, ""):
+            years_experience = 0
+
+        self.conn.execute(
+            """
+            UPDATE candidates
+            SET
+                full_name = ?,
+                phone = ?,
+                education = ?,
+                field_of_study = ?,
+                years_experience = ?,
+                skills = ?,
+                work_experience = ?,
+                preferred_work_mode = ?,
+                preferred_location = ?
+            WHERE user_id = ?
+            """,
+            (
+                data.get("full_name"),
+                data.get("phone"),
+                data.get("education"),
+                data.get("field_of_study"),
+                years_experience,
+                data.get("skills"),
+                data.get("work_experience"),
+                data.get("preferred_work_mode"),
+                data.get("preferred_location"),
+                user_id,
+            )
+        )
+        self.conn.commit()
