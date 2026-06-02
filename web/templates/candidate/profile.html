@@ -64,17 +64,6 @@
           <dt>Skills</dt>
           <dd>{{ profile.skills if profile.skills else 'Not provided' }}</dd>
         </div>
-
-        <div class="candidate-profile-detail-row">
-          <dt>Preferred Work Mode</dt>
-          <dd>{{ profile.preferred_work_mode if profile.preferred_work_mode else 'Not provided' }}</dd>
-        </div>
-
-        <div class="candidate-profile-detail-row">
-          <dt>Preferred Location</dt>
-          <dd>{{ profile.preferred_location if profile.preferred_location else 'Not provided' }}</dd>
-        </div>
-      </dl>
     </section>
 
     <section class="candidate-profile-panel">
@@ -83,7 +72,7 @@
       </div>
 
       <div class="candidate-profile-copy">
-        <p>{{ profile.work_experience if profile.work_experience else 'Not provided' }}</p>
+        <p>{{ profile.work_experience if profile.work_experience else 'Not provided' }} - {{ profile.years_experience if profile.years_experience is defined and profile.years_experience is not none else 'Not provided' }} years</p>
       </div>
     </section>
 
@@ -93,14 +82,14 @@
       </div>
 
       <div class="candidate-profile-preferences">
-        <div class="candidate-profile-preference-item">
+        <div class="candidate-profile-summary-card">
           <span class="candidate-profile-preference-label">Work Mode</span>
           <span class="candidate-profile-preference-value">
             {{ profile.preferred_work_mode if profile.preferred_work_mode else 'Not provided' }}
           </span>
         </div>
 
-        <div class="candidate-profile-preference-item">
+        <div class="candidate-profile-summary-card">
           <span class="candidate-profile-preference-label">Preferred Location</span>
           <span class="candidate-profile-preference-value">
             {{ profile.preferred_location if profile.preferred_location else 'Not provided' }}

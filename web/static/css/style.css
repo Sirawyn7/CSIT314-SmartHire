@@ -433,13 +433,6 @@ main:has(.auth-card) {
   gap: 1rem;
 }
 
-.candidate-profile-preference-item {
-  padding: 1rem;
-  border: 1px solid #f3f4f6;
-  border-radius: 8px;
-  background-color: #f9fafb;
-}
-
 .candidate-profile-preference-label {
   display: block;
   margin-bottom: 0.35rem;
