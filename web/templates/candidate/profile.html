@@ -1,5 +1,102 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>Candidate Profile</h1>
+{% set profile = candidate if candidate is defined and candidate else {} %}
+
+<section class="candidate-profile-page">
+  <header class="candidate-profile-header">
+    <div>
+      <p class="candidate-profile-eyebrow">Candidate Profile</p>
+      <h1 class="candidate-profile-title">
+        {{ profile.full_name if profile.full_name else 'Your Profile' }}
+      </h1>
+      <p class="candidate-profile-intro">
+        Review your professional details, experience, and job preferences in one place.
+      </p>
+    </div>
+  </header>
+
+  <section class="candidate-profile-summary">
+    <div class="candidate-profile-summary-card">
+      <p class="candidate-profile-summary-label">Full Name</p>
+      <p class="candidate-profile-summary-value">
+        {{ profile.full_name if profile.full_name else 'Not provided' }}
+      </p>
+    </div>
+
+    <div class="candidate-profile-summary-card">
+      <p class="candidate-profile-summary-label">Phone</p>
+      <p class="candidate-profile-summary-value">
+        {{ profile.phone if profile.phone else 'Not provided' }}
+      </p>
+    </div>
+
+    <div class="candidate-profile-summary-card">
+      <p class="candidate-profile-summary-label">Experience</p>
+      <p class="candidate-profile-summary-value">
+        {% if profile.years_experience is defined and profile.years_experience is not none %}
+          {{ profile.years_experience }} year{% if profile.years_experience != 1 %}s{% endif %}
+        {% else %}
+          Not provided
+        {% endif %}
+      </p>
+    </div>
+  </section>
+
+  <div class="candidate-profile-layout">
+    <section class="candidate-profile-panel">
+      <div class="candidate-profile-panel-head">
+        <h2>Profile Details</h2>
+      </div>
+
+      <dl class="candidate-profile-details">
+        <div class="candidate-profile-detail-row">
+          <dt>Education</dt>
+          <dd>{{ profile.education if profile.education else 'Not provided' }}</dd>
+        </div>
+
+        <div class="candidate-profile-detail-row">
+          <dt>Field of Study</dt>
+          <dd>{{ profile.field_of_study if profile.field_of_study else 'Not provided' }}</dd>
+        </div>
+
+        <div class="candidate-profile-detail-row">
+          <dt>Skills</dt>
+          <dd>{{ profile.skills if profile.skills else 'Not provided' }}</dd>
+        </div>
+    </section>
+
+    <section class="candidate-profile-panel">
+      <div class="candidate-profile-panel-head">
+        <h2>Work Experience</h2>
+      </div>
+
+      <div class="candidate-profile-copy">
+        <p>{{ profile.work_experience if profile.work_experience else 'Not provided' }} - {{ profile.years_experience if profile.years_experience is defined and profile.years_experience is not none else 'Not provided' }} years</p>
+      </div>
+    </section>
+
+    <section class="candidate-profile-panel candidate-profile-panel-wide">
+      <div class="candidate-profile-panel-head">
+        <h2>Job Preferences</h2>
+      </div>
+
+      <div class="candidate-profile-preferences">
+        <div class="candidate-profile-summary-card">
+          <span class="candidate-profile-preference-label">Work Mode</span>
+          <span class="candidate-profile-preference-value">
+            {{ profile.preferred_work_mode if profile.preferred_work_mode else 'Not provided' }}
+          </span>
+        </div>
+
+        <div class="candidate-profile-summary-card">
+          <span class="candidate-profile-preference-label">Preferred Location</span>
+          <span class="candidate-profile-preference-value">
+            {{ profile.preferred_location if profile.preferred_location else 'Not provided' }}
+          </span>
+        </div>
+      </div>
+    </section>
+  </div>
+</section>
 {% endblock %}

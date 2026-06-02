@@ -1,5 +1,5 @@
 
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, session
 
 
 class CandidateRoutes:
@@ -15,4 +15,10 @@ class CandidateRoutes:
 
     def profile_page(self):
         """Renders the candidate profile page."""
-        return render_template("candidate/profile.html")
+        user_id = session.get("user_id")
+        candidate = None
+
+        if user_id:
+            candidate = self.db.candidates.get_by_user_id(user_id)
+
+        return render_template("candidate/profile.html", candidate=candidate)
