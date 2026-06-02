@@ -9,3 +9,5 @@ JOBS_PER_PAGE = 10
 #Search
 WORK_MODES = ("Remote", "On-site", "Hybrid")
 EDUCATION_LEVELS = ("High School", "Bachelor", "Master", "PhD")
+#Search - defines what fields keyword search compares against
+JOB_KEYWORD_FIELDS = ("title", "description", "location")
