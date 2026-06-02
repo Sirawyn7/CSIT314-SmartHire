@@ -35,9 +35,6 @@ class AuthRoutes:
     def forgot_password_page(self):
         return render_template("auth/forgot_password.html")
     
-    def home_page(self):
-        return render_template("home.html")
-
     def login_post(self):
         """Handles login form submission, creates session on success."""
         email = request.form.get("email")
