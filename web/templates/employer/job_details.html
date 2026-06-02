@@ -1,0 +1,70 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+<div class="job-detail-page">
+
+    <div class="job-detail-back">
+        <a href="/jobs/" class="back-link">← Back to all jobs</a>
+    </div>
+
+    <div class="job-detail-card">
+
+        <div class="job-detail-header">
+            <div class="job-detail-title-group">
+                <h1 class="job-detail-title">{{ job.title }}</h1>
+                <p class="job-detail-company">{{ job.company_name }}</p>
+            </div>
+            <span class="job-badge {% if job.is_active %}badge-active{% else %}badge-inactive{% endif %}">
+                {{ 'Active' if job.is_active else 'Closed' }}
+            </span>
+        </div>
+
+        <div class="job-detail-meta">
+            {% if job.location %}
+            <div class="job-detail-meta-item">
+                <span class="meta-label">Location</span>
+                <span class="meta-value">{{ job.location }}</span>
+            </div>
+            {% endif %}
+            {% if job.work_mode %}
+            <div class="job-detail-meta-item">
+                <span class="meta-label">Work Mode</span>
+                <span class="meta-value">{{ job.work_mode }}</span>
+            </div>
+            {% endif %}
+            {% if job.years_experience_required %}
+            <div class="job-detail-meta-item">
+                <span class="meta-label">Experience</span>
+                <span class="meta-value">{{ job.years_experience_required }}+ years</span>
+            </div>
+            {% endif %}
+            {% if job.required_education %}
+            <div class="job-detail-meta-item">
+                <span class="meta-label">Education</span>
+                <span class="meta-value">{{ job.required_education }}</span>
+            </div>
+            {% endif %}
+        </div>
+
+        {% if job.description %}
+        <div class="job-detail-section">
+            <h2 class="job-detail-section-title">About the Role</h2>
+            <p class="job-detail-body">{{ job.description }}</p>
+        </div>
+        {% endif %}
+
+        {% if job.required_skills %}
+        <div class="job-detail-section">
+            <h2 class="job-detail-section-title">Required Skills</h2>
+            <div class="job-skills-list">
+                {% for skill in job.required_skills.split(',') %}
+                    <span class="skill-tag">{{ skill.strip() }}</span>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+    </div>
+</div>
+{% endblock %}
