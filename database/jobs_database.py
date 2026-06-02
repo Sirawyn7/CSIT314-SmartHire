@@ -84,3 +84,35 @@ class JobsDatabase:
             (employer_id, limit)
         ).fetchall()
         return [dict(row) for row in rows]
+    
+    def get_all_active_paginated(self, page, per_page):
+        """Returns active jobs with company name for a given page. Returns (list of dicts, total count)."""
+        offset = (page - 1) * per_page
+        rows = self.conn.execute(
+            """
+            SELECT jobs.*, employers.company_name
+            FROM jobs
+            JOIN employers ON jobs.employer_id = employers.id
+            WHERE jobs.is_active = 1
+            ORDER BY jobs.created_at DESC
+            LIMIT ? OFFSET ?
+            """,
+            (per_page, offset)
+        ).fetchall()
+        total = self.conn.execute(
+            "SELECT COUNT(*) FROM jobs WHERE is_active = 1"
+        ).fetchone()[0]
+        return [dict(row) for row in rows], total
+    
+    def get_by_id(self, job_id):
+        """Returns a single active job with company name by job ID, or None if not found."""
+        row = self.conn.execute(
+            """
+            SELECT jobs.*, employers.company_name
+            FROM jobs
+            JOIN employers ON jobs.employer_id = employers.id
+            WHERE jobs.id = ?
+            """,
+            (job_id,)
+        ).fetchone()
+        return dict(row) if row else None
