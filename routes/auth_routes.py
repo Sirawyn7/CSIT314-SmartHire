@@ -14,7 +14,6 @@ class AuthRoutes:
         self._register_routes()
 
     def _register_routes(self):
-        self.blueprint.add_url_rule("/base", view_func=self.base, methods=["GET"])
         self.blueprint.add_url_rule("/ping/auth", view_func=self.ping, methods=["GET"])
         self.blueprint.add_url_rule("/login", view_func=self.login_page, methods=["GET"])
         self.blueprint.add_url_rule("/register", view_func=self.register_page, methods=["GET"])
@@ -23,9 +22,6 @@ class AuthRoutes:
         self.blueprint.add_url_rule("/api/auth/register", view_func=self.register_post, methods=["POST"])
         self.blueprint.add_url_rule("/api/auth/forgot-password", view_func=self.forgot_password_submit, methods=["POST"])
         self.blueprint.add_url_rule("/api/auth/logout", view_func=self.logout, methods=["GET"])
-
-    def base(self):
-        return render_template("base.html")
 
     def ping(self):
         return jsonify({"message": "Auth routes are working"}), 200
