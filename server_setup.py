@@ -4,6 +4,8 @@ Flask Server Class
 """
 
 from flask import Flask, jsonify
+import webbrowser
+import os
 from database import DatabaseManager
 from routes import route_classes
 from config import SECRET_KEY
@@ -47,4 +49,7 @@ class Server:
         return jsonify({"message": "Server is running"}), 200
 
     def run(self):
+        #Debug mode runs test launch, this ensures webpage is only opened on main launch
+        if os.environ.get("WERKZEUG_RUN_MAIN") != "true":
+            webbrowser.open("http://127.0.0.1:5000/home")
         self.app.run(debug=True)
