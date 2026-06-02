@@ -87,3 +87,44 @@ document.addEventListener("DOMContentLoaded", () => {
     initUserTypeToggle();
     initPasswordMatchValidation();
 });
+
+function initCandidateProfileModal() {
+    const modal = document.getElementById("candidate-edit-modal");
+    if (!modal) return;
+
+    const openButton = document.querySelector('[data-modal-open="candidate-edit-modal"]');
+    const closeButtons = modal.querySelectorAll("[data-modal-close]");
+
+    const openModal = () => {
+        modal.hidden = false;
+        modal.setAttribute("aria-hidden", "false");
+        document.body.classList.add("modal-open");
+    };
+
+    const closeModal = () => {
+        modal.hidden = true;
+        modal.setAttribute("aria-hidden", "true");
+        document.body.classList.remove("modal-open");
+    };
+
+    if (openButton) {
+        openButton.addEventListener("click", openModal);
+    }
+
+    closeButtons.forEach((button) => {
+        button.addEventListener("click", closeModal);
+    });
+
+    document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape" && !modal.hidden) {
+            closeModal();
+        }
+    });
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    initPasswordToggles();
+    initUserTypeToggle();
+    initPasswordMatchValidation();
+    initCandidateProfileModal();
+});
