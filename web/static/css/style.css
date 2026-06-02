@@ -343,3 +343,143 @@ main:has(.auth-card) {
     font-size: 1rem;
     cursor: pointer;
 }
+
+/* ---- HOME PAGE BANNER -------- */
+
+.hero_section{
+    background: #4268e5;
+    height: 230px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    margin-bottom: 50px;
+    border-radius: 16px;
+}
+
+.hero_text h1{
+    font-size: 4rem;
+    font-weight: 900;
+    color: white;
+    margin-bottom: 10px;
+}
+
+.hero_text p{
+    font-size: 2rem;
+    font-weight: 700;
+    color: white;
+}
+
+
+/* ---- HOW IT WORKS -------- */
+
+.how_section{
+    max-width: 900px;
+    margin: 30px auto;
+}
+
+.how_section h1{
+    text-align: center;
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: #0f1f5c;
+    margin-bottom: 40px;
+}
+
+.how_box{
+    background: #ffffff;
+    padding: 25px;
+    margin-bottom: 20px;
+    border-radius: 14px;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.how_box h2{
+    margin-bottom: 10px;
+    color: #111827;
+}
+
+.how_box p{
+    color: #6b7280;
+}
+
+.how_box:hover{
+    transform: translateY(-6px) scale(1.02);
+    box-shadow: 0 16px 32px rgba(0,0,0,0.12);
+}
+
+
+/* ------ PLATFORM FEATURES ----- */
+
+.feature_section,
+.about_section{
+    max-width: 1200px;
+    margin: 80px auto;
+    text-align: center;
+}
+
+.feature_section h1,
+.about_section h1{
+    font-size: 2rem;
+    font-weight: 800;
+    color: #1e2a78;
+    margin-bottom: 50px;
+}
+
+.feature_container,
+.about_container{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 25px;
+}
+
+.feature_box,
+.about_box{
+    background: white;
+    padding: 30px 20px;
+    border-radius: 16px;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.feature_box h2,
+.about_box h2{
+    color: #111827;
+    margin-bottom: 12px;
+}
+
+.feature_box p,
+.about_box p{
+    color: #6b7280;
+}
+
+
+/* ---- BOTTOM SECTION -------- */
+
+.bottom_section{
+    max-width: 1200px;
+    margin: 80px auto;
+}
+
+.bottom_box{
+    text-align: center;
+    justify-content: center;
+    background: #4268e5;
+    border-radius: 16px;
+    padding: 35px 50px;
+    display: flex;
+    align-items: center;
+}
+
+.bottom_text h1{
+    font-size: 3rem;
+    font-weight: 800;
+    color: white;
+    margin-bottom: 10px;
+}
+
+.bottom_text p{
+    font-size: 1.5rem;
+    color: white;
+}

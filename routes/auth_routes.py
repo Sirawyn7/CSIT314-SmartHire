@@ -15,6 +15,7 @@ class AuthRoutes:
 
     def _register_routes(self):
         self.blueprint.add_url_rule("/ping/auth", view_func=self.ping, methods=["GET"])
+        self.blueprint.add_url_rule("/home", view_func=self.home_page, methods=["GET"])
         self.blueprint.add_url_rule("/login", view_func=self.login_page, methods=["GET"])
         self.blueprint.add_url_rule("/register", view_func=self.register_page, methods=["GET"])
         self.blueprint.add_url_rule("/forgot-password", view_func=self.forgot_password_page, methods=["GET"])
@@ -35,6 +36,8 @@ class AuthRoutes:
     def forgot_password_page(self):
         return render_template("auth/forgot_password.html")
     
+    def home_page(self):
+        return render_template("home.html")
 
     def login_post(self):
         """Handles login form submission, creates session on success."""
