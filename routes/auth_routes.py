@@ -20,7 +20,7 @@ class AuthRoutes:
         self.blueprint.add_url_rule("/forgot-password", view_func=self.forgot_password_page, methods=["GET"])
         self.blueprint.add_url_rule("/api/auth/login", view_func=self.login_post, methods=["POST"])
         self.blueprint.add_url_rule("/api/auth/register", view_func=self.register_post, methods=["POST"])
-        self.blueprint.add_url_rule("/api/auth/forgot-password", view_func=self.forgot_password_submit, methods=["POST"])
+        self.blueprint.add_url_rule("/api/auth/forgot-password", view_func=self.forgot_password_post, methods=["POST"])
         self.blueprint.add_url_rule("/api/auth/logout", view_func=self.logout, methods=["GET"])
 
     def ping(self):
@@ -129,12 +129,18 @@ class AuthRoutes:
             return redirect(url_for("employer.dashboard"))
     
 
-    def forgot_password_submit(self):
-        data = request.get_json()
+    def forgot_password_post(self):
+        """Handles forgot password form submission. Pseudo implementation — no email is sent."""
+        email = request.form.get("email")
 
-        # Password reset logic here
+        user_row = self.db.users.get_by_email(email)
 
-        return jsonify({"message": "Reset link sent"}), 200
+        if not user_row:
+            return render_template("auth/forgot_password.html",
+                error="No account found with that email address.")
+
+        return render_template("auth/forgot_password.html",
+            success=f"A password reset link has been sent to {email}.")
     
 
     def logout(self):

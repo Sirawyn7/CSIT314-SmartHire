@@ -298,6 +298,27 @@ main:has(.auth-card) {
   text-decoration: underline;
 }
 
+.auth-error {
+    color: #ff4d4d;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    text-align: center;
+}
+
+.auth-success {
+    color: #22c55e;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    text-align: center;
+}
+
+.auth-note {
+    color: #6b7280;
+    font-size: 0.85rem;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
 /* Registration form error styling */
 .form-popup {
     position: fixed;
