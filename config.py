@@ -10,4 +10,8 @@ JOBS_PER_PAGE = 10
 WORK_MODES = ("Remote", "On-site", "Hybrid")
 EDUCATION_LEVELS = ("High School", "Bachelor", "Master", "PhD")
 #Search - defines what fields keyword search compares against
-JOB_KEYWORD_FIELDS = ("title", "description", "location")
+JOB_KEYWORD_FIELDS = ("title", "description", "location", "required_skills")
+
+#Fuzzy search
+FUZZY_TYPO_TOLERANCE = 3
+FUZZY_MIN_WORD_LENGTH = 3
