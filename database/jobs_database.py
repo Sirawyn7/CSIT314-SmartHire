@@ -116,3 +116,29 @@ class JobsDatabase:
             (job_id,)
         ).fetchone()
         return dict(row) if row else None
+    
+    def get_all_active_with_employer(self):
+        """Returns all active jobs with company name as a list of dicts."""
+        rows = self.conn.execute(
+            """
+            SELECT jobs.*, employers.company_name
+            FROM jobs
+            JOIN employers ON jobs.employer_id = employers.id
+            WHERE jobs.is_active = 1
+            ORDER BY jobs.created_at DESC
+            """
+        ).fetchall()
+        return [dict(row) for row in rows]
+
+    def get_all_unique_skills(self):
+        """Returns a sorted list of unique skills extracted from all active job postings."""
+        rows = self.conn.execute(
+            "SELECT required_skills FROM jobs WHERE is_active = 1 AND required_skills IS NOT NULL"
+        ).fetchall()
+        skills = set()
+        for row in rows:
+            for skill in row["required_skills"].split(","):
+                stripped = skill.strip()
+                if stripped:
+                    skills.add(stripped)
+        return sorted(skills)

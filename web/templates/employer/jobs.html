@@ -3,7 +3,7 @@
 {% block content %}
 <div class="jobs-page">
 
-  <!-- Search bar — functionality not yet implemented -->
+  <!-- Search bar — keyword functionality not yet implemented -->
   <div class="search-section">
     <form class="search-form" method="GET" action="/jobs/">
       <div class="search-bar">
@@ -19,26 +19,44 @@
         />
       </div>
       <div class="filter-row">
-        <select class="filter-select" disabled>
+
+        <select class="filter-select" name="work_mode">
           <option value="">Work Mode</option>
-          <option value="Remote">Remote</option>
-          <option value="On-site">On-site</option>
-          <option value="Hybrid">Hybrid</option>
+          {% for mode in work_modes %}
+            <option value="{{ mode }}" {% if selected_work_mode == mode %}selected{% endif %}>{{ mode }}</option>
+          {% endfor %}
         </select>
-        <select class="filter-select" disabled>
-          <option value="">Experience Level</option>
-          <option value="0">Entry Level</option>
-          <option value="2">2+ Years</option>
-          <option value="5">5+ Years</option>
-        </select>
-        <select class="filter-select" disabled>
+
+        <select class="filter-select" name="education">
           <option value="">Education</option>
-          <option value="High School">High School</option>
-          <option value="Bachelor">Bachelor</option>
-          <option value="Master">Master</option>
-          <option value="PhD">PhD</option>
+          {% for level in education_levels %}
+            <option value="{{ level }}" {% if selected_education == level %}selected{% endif %}>{{ level }}</option>
+          {% endfor %}
         </select>
-        <button type="submit" class="search-btn" disabled>Search</button>
+
+        <select class="filter-select" name="experience">
+          <option value="">Experience</option>
+          <option value="0" {% if selected_experience == '0' %}selected{% endif %}>Any</option>
+          <option value="1" {% if selected_experience == '1' %}selected{% endif %}>1+ years</option>
+          <option value="2" {% if selected_experience == '2' %}selected{% endif %}>2+ years</option>
+          <option value="3" {% if selected_experience == '3' %}selected{% endif %}>3+ years</option>
+          <option value="5" {% if selected_experience == '5' %}selected{% endif %}>5+ years</option>
+          <option value="8" {% if selected_experience == '8' %}selected{% endif %}>8+ years</option>
+        </select>
+
+        <select class="filter-select" name="skill">
+          <option value="">Skill</option>
+          {% for skill in all_skills %}
+            <option value="{{ skill }}" {% if selected_skill == skill %}selected{% endif %}>{{ skill }}</option>
+          {% endfor %}
+        </select>
+
+        <button type="submit" class="search-btn">Filter</button>
+
+        {% if active_filters %}
+          <a href="/jobs/" class="clear-btn">Clear</a>
+        {% endif %}
+
       </div>
     </form>
   </div>
@@ -56,7 +74,9 @@
       <div class="job-card">
         <div class="job-card-header">
           <div class="job-card-title-group">
-            <a href="/jobs/{{ job.id }}" class="job-title-link">{{ job.title }}</a>
+            <h3 class="job-title">
+              <a href="/jobs/{{ job.id }}" class="job-title-link">{{ job.title }}</a>
+            </h3>
             <p class="job-meta">{{ job.company_name }}{% if job.location %} &middot; {{ job.location }}{% endif %}{% if job.work_mode %} &middot; {{ job.work_mode }}{% endif %}{% if job.years_experience_required %} &middot; {{ job.years_experience_required }}+ yrs exp{% endif %}</p>
           </div>
           <span class="job-badge {% if job.is_active %}badge-active{% else %}badge-inactive{% endif %}">
@@ -72,7 +92,7 @@
       {% endfor %}
     {% else %}
       <div class="empty-state">
-        <p>No job listings are currently available.</p>
+        <p>No jobs match your current filters.</p>
       </div>
     {% endif %}
   </div>
@@ -81,7 +101,7 @@
   {% if total_pages > 1 %}
   <div class="pagination">
     {% if page > 1 %}
-      <a href="/jobs/?page={{ page - 1 }}" class="page-btn">← Previous</a>
+      <a href="/jobs/?page={{ page - 1 }}&work_mode={{ selected_work_mode }}&education={{ selected_education }}&experience={{ selected_experience }}&skill={{ selected_skill }}" class="page-btn">← Previous</a>
     {% else %}
       <span class="page-btn page-btn-disabled">← Previous</span>
     {% endif %}
@@ -89,7 +109,7 @@
     <span class="page-indicator">Page {{ page }} of {{ total_pages }}</span>
 
     {% if page < total_pages %}
-      <a href="/jobs/?page={{ page + 1 }}" class="page-btn">Next →</a>
+      <a href="/jobs/?page={{ page + 1 }}&work_mode={{ selected_work_mode }}&education={{ selected_education }}&experience={{ selected_experience }}&skill={{ selected_skill }}" class="page-btn">Next →</a>
     {% else %}
       <span class="page-btn page-btn-disabled">Next →</span>
     {% endif %}
