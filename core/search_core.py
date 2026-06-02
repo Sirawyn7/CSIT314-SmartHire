@@ -53,3 +53,17 @@ class SearchEngine:
                 return False
 
         return True
+    
+    def keyword_search(self, query, items, fields):
+        """Returns items where query is a substring of any specified field. Case-insensitive."""
+        query_lower = query.strip().lower()
+        if not query_lower:
+            return items
+        results = []
+        for item in items:
+            for field in fields:
+                value = item.get(field) or ""
+                if query_lower in value.lower():
+                    results.append(item)
+                    break
+        return results

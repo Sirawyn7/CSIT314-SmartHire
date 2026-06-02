@@ -2,7 +2,7 @@
 
 import math
 from flask import Blueprint, render_template, request
-from config import JOBS_PER_PAGE, WORK_MODES, EDUCATION_LEVELS
+from config import JOBS_PER_PAGE, WORK_MODES, EDUCATION_LEVELS, JOB_KEYWORD_FIELDS
 from core.search_core import SearchEngine
 
 
@@ -21,7 +21,7 @@ class JobRoutes:
 
 
     def jobs_page(self):
-        """Renders the paginated job listings page with optional filter search."""
+        """Renders the paginated job listings page with optional keyword and filter search."""
         try:
             page = int(request.args.get("page", 1))
             if page < 1:
@@ -29,7 +29,10 @@ class JobRoutes:
         except ValueError:
             page = 1
 
-        #Read filter args — empty string treated as no filter
+        # Read search query
+        query = request.args.get("q", "").strip()
+
+        # Read filter args
         work_mode = request.args.get("work_mode", "").strip()
         education = request.args.get("education", "").strip()
         location = request.args.get("location", "").strip()
@@ -52,15 +55,18 @@ class JobRoutes:
         active_filters = {k: v for k, v in filters.items() if v is not None}
         all_jobs = self.db.jobs.get_all_active_with_employer()
 
-        if active_filters:
-            matched_jobs = self.search_engine.filter_search(all_jobs, filters)
+        # Keyword first, then filter on the resulting subset
+        if query:
+            matched_jobs = self.search_engine.keyword_search(query, all_jobs, JOB_KEYWORD_FIELDS)
         else:
             matched_jobs = all_jobs
+
+        if active_filters:
+            matched_jobs = self.search_engine.filter_search(matched_jobs, filters)
 
         total = len(matched_jobs)
         total_pages = math.ceil(total / JOBS_PER_PAGE) if total > 0 else 1
 
-        #Clamp page to valid range after filtering
         if page > total_pages:
             page = total_pages
 
@@ -85,6 +91,7 @@ class JobRoutes:
             selected_experience=raw_experience,
             selected_location=location,
             selected_skill=skill,
+            query=query,
         )
 
     def job_details_page(self, job_id):
