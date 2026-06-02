@@ -77,7 +77,7 @@ main {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background-color: #2563eb;
+  background-color: #1a2f7a;
   color: #ffffff;
   font-weight: 700;
   font-size: 0.9rem;
@@ -149,9 +149,8 @@ main {
 
 /* ── Auth Pages (login, register, forgot password) ── */
 
-/* light blue background applied to the full page area beneath the navbar */
 main:has(.auth-card) {
-  background-color: #dce8fb;
+  background-color: #ffffff;
   min-height: 100vh;
   display: flex;
   align-items: center;
@@ -159,10 +158,11 @@ main:has(.auth-card) {
   padding: 2rem;
 }
 
-/* white rounded card that contains the auth form */
 .auth-card {
   background-color: #ffffff;
-  border-radius: 16px;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 18px 40px rgba(15, 31, 92, 0.08);
+  border-radius: 20px;
   padding: 2.5rem 2rem;
   width: 100%;
   max-width: 480px;
