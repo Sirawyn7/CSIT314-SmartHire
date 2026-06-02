@@ -21,7 +21,7 @@ class JobRoutes:
 
 
     def jobs_page(self):
-        """Renders the paginated job listings page with optional keyword and filter search."""
+        """Renders the paginated job listings page with keyword, fuzzy, and filter search."""
         try:
             page = int(request.args.get("page", 1))
             if page < 1:
@@ -29,10 +29,8 @@ class JobRoutes:
         except ValueError:
             page = 1
 
-        # Read search query
         query = request.args.get("q", "").strip()
 
-        # Read filter args
         work_mode = request.args.get("work_mode", "").strip()
         education = request.args.get("education", "").strip()
         location = request.args.get("location", "").strip()
@@ -52,17 +50,8 @@ class JobRoutes:
             "skill": skill or None,
         }
 
-        active_filters = {k: v for k, v in filters.items() if v is not None}
         all_jobs = self.db.jobs.get_all_active_with_employer()
-
-        # Keyword first, then filter on the resulting subset
-        if query:
-            matched_jobs = self.search_engine.keyword_search(query, all_jobs, JOB_KEYWORD_FIELDS)
-        else:
-            matched_jobs = all_jobs
-
-        if active_filters:
-            matched_jobs = self.search_engine.filter_search(matched_jobs, filters)
+        matched_jobs = self.search_engine.combined_search(query, all_jobs, JOB_KEYWORD_FIELDS, filters)
 
         total = len(matched_jobs)
         total_pages = math.ceil(total / JOBS_PER_PAGE) if total > 0 else 1
@@ -75,6 +64,7 @@ class JobRoutes:
         jobs = matched_jobs[start:end]
 
         all_skills = self.db.jobs.get_all_unique_skills()
+        active_filters = {k: v for k, v in filters.items() if v is not None}
 
         return render_template(
             "employer/jobs.html",
