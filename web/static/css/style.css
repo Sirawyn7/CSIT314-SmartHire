@@ -471,6 +471,7 @@ main:has(.auth-card) {
   .candidate-profile-summary-card {
     padding: 1rem;
   }
+}
 .auth-error {
     color: #ff4d4d;
     font-weight: 600;
@@ -515,4 +516,267 @@ main:has(.auth-card) {
     color: white;
     font-size: 1rem;
     cursor: pointer;
+}
+
+/* Employer Dashboard */
+.employer-dashboard-page {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 1rem 0 2rem;
+}
+
+.employer-dashboard-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.employer-dashboard-eyebrow {
+  margin: 0 0 0.35rem 0;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #2563eb;
+  text-transform: uppercase;
+}
+
+.employer-dashboard-title {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 800;
+  color: #111827;
+}
+
+.employer-dashboard-intro {
+  max-width: 700px;
+  margin: 0.5rem 0 0 0;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: #6b7280;
+}
+
+.employer-dashboard-summary {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.employer-dashboard-summary-card,
+.employer-dashboard-panel {
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+}
+
+.employer-dashboard-summary-card {
+  padding: 1.1rem 1.25rem;
+}
+
+.employer-dashboard-summary-label {
+  margin: 0 0 0.45rem 0;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #6b7280;
+  text-transform: uppercase;
+}
+
+.employer-dashboard-summary-value {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #111827;
+}
+
+.employer-dashboard-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  gap: 1rem;
+}
+
+.employer-dashboard-panel {
+  padding: 1.25rem;
+}
+
+.employer-dashboard-panel-wide {
+  grid-column: 1 / -1;
+}
+
+.employer-dashboard-panel-head h2 {
+  margin: 0 0 1rem 0;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #111827;
+}
+
+.employer-dashboard-details {
+  margin: 0;
+}
+
+.employer-dashboard-detail-row {
+  display: grid;
+  grid-template-columns: 170px minmax(0, 1fr);
+  gap: 1rem;
+  padding: 0.85rem 0;
+  border-top: 1px solid #f3f4f6;
+}
+
+.employer-dashboard-detail-row:first-child {
+  border-top: none;
+  padding-top: 0;
+}
+
+.employer-dashboard-detail-row dt {
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: #374151;
+}
+
+.employer-dashboard-detail-row dd {
+  margin: 0;
+  font-size: 0.94rem;
+  line-height: 1.6;
+  color: #111827;
+}
+
+.employer-dashboard-copy p {
+  margin: 0;
+  font-size: 0.94rem;
+  line-height: 1.7;
+  color: #111827;
+  white-space: pre-line;
+}
+
+.employer-dashboard-preferences {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.employer-dashboard-preference-label {
+  display: block;
+  margin-bottom: 0.35rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #6b7280;
+  text-transform: uppercase;
+}
+
+.employer-dashboard-preference-value {
+  display: block;
+  font-size: 0.96rem;
+  font-weight: 600;
+  color: #111827;
+}
+
+.employer-dashboard-link {
+  color: #2563eb;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.employer-dashboard-link:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 900px) {
+  .employer-dashboard-summary,
+  .employer-dashboard-layout,
+  .employer-dashboard-preferences {
+    grid-template-columns: 1fr;
+  }
+
+  .employer-dashboard-detail-row {
+    grid-template-columns: 1fr;
+    gap: 0.35rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .employer-dashboard-title {
+    font-size: 1.6rem;
+  }
+
+  .employer-dashboard-panel,
+  .employer-dashboard-summary-card {
+    padding: 1rem;
+  }
+}
+
+.employer-dashboard-jobs {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.employer-dashboard-job-card {
+  border: 1px solid #f3f4f6;
+  border-radius: 10px;
+  padding: 1rem;
+  background-color: #ffffff;
+}
+
+.employer-dashboard-job-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.employer-dashboard-job-title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #111827;
+}
+
+.employer-dashboard-job-status {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #2563eb;
+  background-color: #dbeafe;
+  padding: 0.3rem 0.65rem;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.employer-dashboard-job-meta {
+  margin: 0.6rem 0 0 0;
+  font-size: 0.88rem;
+  color: #6b7280;
+}
+
+.employer-dashboard-job-description {
+  margin: 0.6rem 0 0 0;
+  font-size: 0.92rem;
+  line-height: 1.6;
+  color: #111827;
+}
+
+@media (max-width: 900px) {
+  .employer-dashboard-jobs {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Members Badge*/
+.profile-title-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.member-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  background-color: #dbeafe;
+  color: #1d4ed8;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
 }

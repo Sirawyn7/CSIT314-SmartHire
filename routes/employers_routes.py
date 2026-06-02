@@ -1,5 +1,5 @@
 
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, session
 
 
 class EmployerRoutes:
@@ -15,4 +15,22 @@ class EmployerRoutes:
 
     def dashboard(self):
         """Renders the employer dashboard page."""
-        return render_template("employer/dashboard.html")
+        user_id = session.get("user_id")
+        employer = None
+        recent_jobs = []
+        is_member = False
+
+        if user_id:
+            employer = self.db.employers.get_by_user_id(user_id)
+            user = self.db.users.get_by_user_id(user_id)
+            is_member = bool(user["is_member"]) if user else False
+
+            if employer:
+                recent_jobs = self.db.jobs.get_recent_by_employer_id(employer["id"], limit=4)
+
+        return render_template(
+            "employer/dashboard.html",
+            employer=employer,
+            recent_jobs=recent_jobs,
+            is_member=is_member
+        )

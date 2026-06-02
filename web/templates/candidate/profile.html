@@ -8,7 +8,8 @@
     <div>
       <p class="candidate-profile-eyebrow">Candidate Profile</p>
       <h1 class="candidate-profile-title">
-        {{ profile.full_name if profile.full_name else 'Your Profile' }}
+        {{ profile.full_name if profile.full_name else 'Your Profile' }} 
+        {% if is_member %}<span class="member-badge">Member</span>{% else %} <span class="member-badge member-badge-standard">Non-member</span>{% endif %}
       </h1>
       <p class="candidate-profile-intro">
         Review your professional details, experience, and job preferences in one place.
