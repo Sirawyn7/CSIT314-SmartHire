@@ -70,3 +70,17 @@ class JobsDatabase:
             "SELECT COUNT(*) FROM jobs WHERE source = ?", (source,)
         ).fetchone()
         return row[0]
+    
+    def get_recent_by_employer_id(self, employer_id, limit=4):
+        """Returns the most recent job rows for an employer."""
+        rows = self.conn.execute(
+            """
+            SELECT *
+            FROM jobs
+            WHERE employer_id = ?
+            ORDER BY datetime(created_at) DESC, id DESC
+            LIMIT ?
+            """,
+            (employer_id, limit)
+        ).fetchall()
+        return [dict(row) for row in rows]

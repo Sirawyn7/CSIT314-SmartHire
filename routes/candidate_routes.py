@@ -17,8 +17,15 @@ class CandidateRoutes:
         """Renders the candidate profile page."""
         user_id = session.get("user_id")
         candidate = None
+        is_member = False
 
         if user_id:
             candidate = self.db.candidates.get_by_user_id(user_id)
+            user = self.db.users.get_by_user_id(user_id)
+            is_member = bool(user["is_member"]) if user else False
 
-        return render_template("candidate/profile.html", candidate=candidate)
+        return render_template(
+            "candidate/profile.html",
+            candidate=candidate,
+            is_member=is_member
+        )
