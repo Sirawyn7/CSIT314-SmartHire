@@ -99,4 +99,4 @@ class JobRoutes:
         job = self.db.jobs.get_by_id(job_id)
         if job is None:
             return render_template("error.html", message="Job not found."), 404
-        return render_template("employer/job_detail.html", job=job)
+        return render_template("employer/job_details.html", job=job)
