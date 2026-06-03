@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="employer-dashboard-page">
+  <header class="employer-dashboard-header">
+    <div>
+      <p class="employer-dashboard-eyebrow">Job Management</p>
+      <h1 class="employer-dashboard-title">Manage Your Job Listings</h1>
+    </div>
+    <a href="{{ url_for('employer.dashboard') }}" class="btn btn-secondary">← Back to Dashboard</a>
+  </header>
+</section>
+
+<div class="employer-dashboard-layout">
+
+  <!-- Tab Navigation -->
+  <div class="job-mgmt-tabs">
+    <a href="{{ url_for('employer.manage_jobs', tab='active') }}"
+       class="job-mgmt-tab {% if tab == 'active' %}job-mgmt-tab--active{% endif %}">
+      Active Jobs
+      <span class="job-mgmt-tab-count">{{ active_jobs | length }}</span>
+    </a>
+    <a href="{{ url_for('employer.manage_jobs', tab='inactive') }}"
+       class="job-mgmt-tab {% if tab == 'inactive' %}job-mgmt-tab--active{% endif %}">
+      Historical Jobs
+      <span class="job-mgmt-tab-count">{{ inactive_jobs | length }}</span>
+    </a>
+  </div>
+
+  <!-- Active Jobs Tab -->
+  {% if tab == 'active' %}
+  <section class="employer-dashboard-panel employer-dashboard-panel-wide">
+    <div class="employer-dashboard-panel-head">
+      <h2>Active Listings</h2>
+    </div>
+
+    {% if active_jobs %}
+      <div class="employer-dashboard-jobs">
+        {% for job in active_jobs %}
+          <article class="employer-dashboard-job-card">
+            <div class="employer-dashboard-job-top">
+              <h3 class="employer-dashboard-job-title">{{ job.title }}</h3>
+              <span class="employer-dashboard-job-status">Active</span>
+            </div>
+            <p class="employer-dashboard-job-meta">
+              {{ job.location if job.location else 'Location not provided' }}
+              {% if job.work_mode %} | {{ job.work_mode }}{% endif %}
+              {% if job.years_experience_required %} | {{ job.years_experience_required }}+ yrs exp{% endif %}
+            </p>
+            <p class="employer-dashboard-job-description">{{ job.description }}</p>
+            <p class="job-mgmt-posted">Posted: {{ job.created_at }}</p>
+            <div class="job-mgmt-actions">
+              <a href="{{ url_for('jobs.job_details_page', job_id=job.id) }}" class="btn btn-secondary btn-sm">View</a>
+              <form method="POST" action="{{ url_for('employer.deactivate_job', job_id=job.id) }}"
+                    onsubmit="return confirm('Deactivate this job? It will no longer appear in listings.')">
+                <button type="submit" class="btn btn-danger btn-sm">Deactivate</button>
+              </form>
+            </div>
+          </article>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="employer-dashboard-copy job-mgmt-empty">
+        <p>You have no active job listings. Post a new job to get started.</p>
+      </div>
+    {% endif %}
+  </section>
+
+  <!-- Inactive / Historical Jobs Tab -->
+  {% elif tab == 'inactive' %}
+  <section class="employer-dashboard-panel employer-dashboard-panel-wide">
+    <div class="employer-dashboard-panel-head">
+      <h2>Historical Listings</h2>
+    </div>
+
+    {% if inactive_jobs %}
+      <div class="employer-dashboard-jobs">
+        {% for job in inactive_jobs %}
+          <article class="employer-dashboard-job-card employer-dashboard-job-card--inactive">
+            <div class="employer-dashboard-job-top">
+              <h3 class="employer-dashboard-job-title">{{ job.title }}</h3>
+              <span class="employer-dashboard-job-status employer-dashboard-job-status--inactive">Inactive</span>
+            </div>
+            <p class="employer-dashboard-job-meta">
+              {{ job.location if job.location else 'Location not provided' }}
+              {% if job.work_mode %} | {{ job.work_mode }}{% endif %}
+            </p>
+            <p class="employer-dashboard-job-description">{{ job.description }}</p>
+            <p class="job-mgmt-posted">Posted: {{ job.created_at }}</p>
+            <div class="job-mgmt-actions">
+              <form method="POST" action="{{ url_for('employer.reactivate_job', job_id=job.id) }}">
+                <button type="submit" class="btn btn-primary btn-sm">Reactivate</button>
+              </form>
+            </div>
+          </article>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="employer-dashboard-copy job-mgmt-empty">
+        <p>No historical jobs found. Deactivated jobs will appear here.</p>
+      </div>
+    {% endif %}
+  </section>
+  {% endif %}
+
+</div>
+{% endblock %}
