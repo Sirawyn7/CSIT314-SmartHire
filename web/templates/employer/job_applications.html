@@ -1,0 +1,168 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="candidate-profile-page">
+  <header class="candidate-profile-header">
+    <div>
+      <p class="candidate-profile-eyebrow">Employer Applications</p>
+      <h1 class="candidate-profile-title">{{ job.title }}</h1>
+      <p class="candidate-profile-intro">
+        Review submitted applications and compare each candidate against this job's requirements.
+      </p>
+    </div>
+
+    <div class="candidate-profile-header-actions">
+      <a href="{{ url_for('employer.manage_jobs', tab='active') }}" class="candidate-profile-applications-btn">
+        Back to Manage Jobs
+      </a>
+    </div>
+  </header>
+
+  {% if updated %}
+    <section class="candidate-profile-panel candidate-profile-panel-wide">
+      <div class="candidate-profile-copy">
+        <p>Application status updated successfully.</p>
+      </div>
+    </section>
+  {% endif %}
+
+  {% if applications %}
+    <section class="candidate-profile-layout">
+      {% for application in applications %}
+        <article class="candidate-profile-panel candidate-application-card">
+          <div class="candidate-application-card-head">
+            <div>
+              <h2 class="candidate-application-title">{{ application.full_name }}</h2>
+              <p class="candidate-application-company">
+                {{ application.phone if application.phone else 'Phone not provided' }}
+              </p>
+            </div>
+
+            <span class="job-badge {% if application.status in ['rejected', 'withdrawn'] %}badge-inactive{% else %}badge-active{% endif %}">
+              {{ application.status|title }}
+            </span>
+          </div>
+
+          <div class="candidate-profile-preferences">
+            <div class="candidate-profile-summary-card">
+              <span class="candidate-profile-preference-label">Applied On</span>
+              <span class="candidate-profile-preference-value">{{ application.applied_at }}</span>
+            </div>
+
+            <div class="candidate-profile-summary-card">
+              <span class="candidate-profile-preference-label">Field of Study</span>
+              <span class="candidate-profile-preference-value">{{ application.field_of_study if application.field_of_study else 'Not provided' }}</span>
+            </div>
+          </div>
+
+          <div class="candidate-profile-copy">
+            <h3 class="candidate-application-note-title">Job vs Candidate Comparison</h3>
+
+            <div class="candidate-profile-preferences">
+              <div class="candidate-profile-summary-card">
+                <span class="candidate-profile-preference-label">Education Required</span>
+                <span class="candidate-profile-preference-value">{{ application.required_education if application.required_education else 'Not specified' }}</span>
+              </div>
+              <div class="candidate-profile-summary-card">
+                <span class="candidate-profile-preference-label">Candidate Education</span>
+                <span class="candidate-profile-preference-value">{{ application.education if application.education else 'Not provided' }}</span>
+              </div>
+
+              <div class="candidate-profile-summary-card">
+                <span class="candidate-profile-preference-label">Experience Required</span>
+                <span class="candidate-profile-preference-value">
+                  {{ application.years_experience_required if application.years_experience_required is not none else 'Not specified' }}
+                </span>
+              </div>
+              <div class="candidate-profile-summary-card">
+                <span class="candidate-profile-preference-label">Candidate Experience</span>
+                <span class="candidate-profile-preference-value">
+                  {{ application.years_experience if application.years_experience is not none else 'Not provided' }}
+                </span>
+              </div>
+
+              <div class="candidate-profile-summary-card">
+                <span class="candidate-profile-preference-label">Required Skills</span>
+                <span class="candidate-profile-preference-value">{{ application.required_skills if application.required_skills else 'Not specified' }}</span>
+              </div>
+              <div class="candidate-profile-summary-card">
+                <span class="candidate-profile-preference-label">Candidate Skills</span>
+                <span class="candidate-profile-preference-value">{{ application.skills if application.skills else 'Not provided' }}</span>
+              </div>
+
+              <div class="candidate-profile-summary-card">
+                <span class="candidate-profile-preference-label">Job Work Mode</span>
+                <span class="candidate-profile-preference-value">{{ application.job_work_mode if application.job_work_mode else 'Not specified' }}</span>
+              </div>
+              <div class="candidate-profile-summary-card">
+                <span class="candidate-profile-preference-label">Candidate Preference</span>
+                <span class="candidate-profile-preference-value">{{ application.preferred_work_mode if application.preferred_work_mode else 'Not provided' }}</span>
+              </div>
+
+              <div class="candidate-profile-summary-card">
+                <span class="candidate-profile-preference-label">Job Location</span>
+                <span class="candidate-profile-preference-value">{{ application.job_location if application.job_location else 'Not specified' }}</span>
+              </div>
+              <div class="candidate-profile-summary-card">
+                <span class="candidate-profile-preference-label">Candidate Preferred Location</span>
+                <span class="candidate-profile-preference-value">{{ application.preferred_location if application.preferred_location else 'Not provided' }}</span>
+              </div>
+            </div>
+          </div>
+
+        <div class="candidate-profile-copy">
+
+            <h3 class="candidate-application-note-title">Job Description Preview</h3>
+            <div class="application-preview-text">
+            {{ application.job_description if application.job_description else 'No description provided.' }}
+            </div>
+
+            <h3 class="candidate-application-note-title">Candidate Work Experience</h3>
+            <div class="application-preview-text">
+            {{ application.work_experience if application.work_experience else 'No work experience provided.' }}
+            </div>
+
+            <h3 class="candidate-application-note-title">Cover Letter</h3>
+            <div class="application-preview-text">
+            {{ application.cover_letter if application.cover_letter else 'No cover letter submitted.' }}
+            </div>
+        </div>
+
+          {% if application.status != 'withdrawn' %}
+
+            <div class="candidate-application-actions">
+            <form
+                method="POST"
+                action="{{ url_for('employer.update_application_status', application_id=application.id) }}"
+                class="application-status-form"
+            >
+                <div class="application-status-select-wrap">
+                <select name="status" class="application-status-select">
+                    <option value="pending" {% if application.status == 'pending' %}selected{% endif %}>Pending</option>
+                    <option value="reviewed" {% if application.status == 'reviewed' %}selected{% endif %}>Reviewed</option>
+                    <option value="accepted" {% if application.status == 'accepted' %}selected{% endif %}>Accepted</option>
+                    <option value="rejected" {% if application.status == 'rejected' %}selected{% endif %}>Rejected</option>
+                </select>
+                </div>
+
+                <button type="submit" class="candidate-application-btn application-status-btn">
+                Update Status
+                </button>
+            </form>
+            </div>
+          {% endif %}
+        </article>
+      {% endfor %}
+    </section>
+  {% else %}
+    <section class="candidate-profile-panel candidate-profile-panel-wide">
+      <div class="candidate-profile-panel-head">
+        <h2>No Applications Yet</h2>
+      </div>
+      <div class="candidate-profile-copy">
+        <p>No candidates have applied for this job yet.</p>
+      </div>
+    </section>
+  {% endif %}
+</section>
+{% endblock %}

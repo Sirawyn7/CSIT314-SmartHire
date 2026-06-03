@@ -1833,6 +1833,7 @@ body.modal-open {
   font-size: 0.95rem;
   font-weight: 700;
   color: #111827;
+  padding-top: 0.75rem;
 }
 
 @media (max-width: 640px) {
@@ -1957,4 +1958,67 @@ body.modal-open {
 .candidate-empty-state-btn:hover {
   background-color: #1a2f7a;
   transform: translateY(-1px);
+}
+
+.application-preview-bubbles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.85rem;
+}
+
+.application-preview-bubble {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.32rem 0.7rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 999px;
+  background: #f8fafc;
+  color: #475569;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.application-preview-text {
+  padding: 0.75rem 1rem;
+  background: #f8fafc;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+}
+
+.application-status-form {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.application-status-select {
+  min-width: 200px;
+  padding: 0.7rem 2.2rem 0.7rem 0.85rem;
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: #111827;
+  background-color: #ffffff;
+  cursor: pointer;
+  outline: none;
+}
+
+.application-status-select:focus {
+  border-color: #94a3b8;
+  box-shadow: 0 0 0 3px rgba(148, 163, 184, 0.18);
+}
+
+@media (max-width: 640px) {
+  .application-status-form {
+    align-items: stretch;
+  }
+
+  .application-status-select {
+    width: 100%;
+    min-width: 0;
+  }
 }

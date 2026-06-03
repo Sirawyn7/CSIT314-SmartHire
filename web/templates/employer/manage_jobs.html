@@ -66,6 +66,12 @@
               <form class="deactivate-form" data-action="{{ url_for('employer.deactivate_job', job_id=job.id) }}">
                 <button type="button" class="btn btn-danger" onclick="openModal(this)">Deactivate</button>
               </form>
+              <a
+                href="{{ url_for('employer.job_applications_page', job_id=job.id) }}"
+                class="btn-view"
+              >
+                View Applications
+              </a>
             </div>
           </article>
         {% endfor %}
