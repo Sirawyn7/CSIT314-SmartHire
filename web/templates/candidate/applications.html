@@ -1,0 +1,163 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% set profile = candidate if candidate is defined and candidate else {} %}
+
+<section class="candidate-profile-page">
+  <header class="candidate-profile-header">
+    <div>
+      <p class="candidate-profile-eyebrow">Candidate Applications</p>
+      <h1 class="candidate-profile-title">
+        {{ profile.full_name if profile.full_name else 'Your Applications' }}
+      </h1>
+      <p class="candidate-profile-intro">
+        Review the jobs you have applied for, revisit the listing, or remove an application.
+      </p>
+    </div>
+
+    <div class="candidate-profile-header-actions">
+      <a href="{{ url_for('candidate.profile_page') }}" class="candidate-profile-applications-btn">
+        Back to Profile
+      </a>
+    </div>
+  </header>
+
+  {% if applications %}
+    <section class="candidate-profile-layout">
+      {% for application in applications %}
+        <article class="candidate-profile-panel candidate-application-card">
+          <div class="candidate-application-card-head">
+            <div>
+              <h2 class="candidate-application-title">
+                <a href="{{ url_for('jobs.job_details_page', job_id=application.job_id) }}" class="candidate-application-link">
+                  {{ application.title }}
+                </a>
+              </h2>
+              <p class="candidate-application-company">{{ application.company_name }}</p>
+            </div>
+
+            <span class="job-badge {% if application.is_active %}badge-active{% else %}badge-inactive{% endif %}">
+              {{ application.status|title }}
+            </span>
+          </div>
+
+          <div class="candidate-profile-preferences">
+            <div class="candidate-profile-summary-card">
+              <span class="candidate-profile-preference-label">Location</span>
+              <span class="candidate-profile-preference-value">
+                {{ application.location if application.location else 'Not provided' }}
+              </span>
+            </div>
+
+            <div class="candidate-profile-summary-card">
+              <span class="candidate-profile-preference-label">Work Mode</span>
+              <span class="candidate-profile-preference-value">
+                {{ application.work_mode if application.work_mode else 'Not provided' }}
+              </span>
+            </div>
+
+            <div class="candidate-profile-summary-card">
+              <span class="candidate-profile-preference-label">Applied On</span>
+              <span class="candidate-profile-preference-value">
+                {{ application.applied_at }}
+              </span>
+            </div>
+          </div>
+
+          <div class="candidate-profile-copy">
+            <h3 class="candidate-application-note-title">Application Note</h3>
+            {% if application.cover_letter %}
+              <p>{{ application.cover_letter }}</p>
+            {% else %}
+              <p>No application note was submitted for this job.</p>
+            {% endif %}
+          </div>
+
+        <div class="candidate-application-actions">
+            <a
+              href="{{ url_for('jobs.job_details_page', job_id=application.job_id) }}"
+              class="btn-view"
+            >
+              Review Application
+            </a>
+
+            <form
+                method="POST"
+                action="{{ url_for('candidate.delete_application_post', application_id=application.id) }}"
+                class="remove-application-form"
+            >
+              <button type="button" class="btn btn-danger" onclick="openRemoveApplicationModal(this)">
+                Remove Application
+              </button>
+            </form>
+          </div>
+        </article>
+      {% endfor %}
+    </section>
+  {% else %}
+    <section class="candidate-profile-panel candidate-profile-panel-wide">
+      <div class="candidate-profile-panel-head">
+        <h2>No Applications Yet</h2>
+      </div>
+      <div class="candidate-profile-copy">
+        <p>You have not applied for any jobs yet.</p>
+        <p>
+          <a href="{{ url_for('jobs.jobs_page') }}" class="candidate-application-link">
+            Browse current job listings
+          </a>
+        </p>
+      </div>
+    </section>
+  {% endif %}
+</section>
+<div
+  id="remove-application-modal"
+  class="candidate-profile-modal"
+  hidden
+  aria-hidden="true"
+>
+  <div class="candidate-profile-modal-backdrop" data-remove-application-close></div>
+
+  <div
+    class="candidate-profile-modal-dialog candidate-remove-application-modal-dialog"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="remove-application-modal-title"
+  >
+    <div class="candidate-profile-modal-header">
+      <h2 id="remove-application-modal-title">Remove Application?</h2>
+      <button
+        type="button"
+        class="candidate-profile-modal-close"
+        aria-label="Close"
+        data-remove-application-close
+      >
+        ×
+      </button>
+    </div>
+
+    <div class="candidate-profile-modal-body">
+      <p class="candidate-profile-intro" style="margin: 0;">
+        This application will be permanently removed from your applied jobs list.
+      </p>
+    </div>
+
+    <div class="candidate-profile-modal-footer">
+      <button
+        type="button"
+        class="candidate-profile-cancel-btn"
+        data-remove-application-close
+      >
+        Cancel
+      </button>
+      <button
+        type="button"
+        id="remove-application-confirm-btn"
+        class="candidate-application-remove-confirm-btn"
+      >
+        Remove Application
+      </button>
+    </div>
+  </div>
+</div>
+{% endblock %}
