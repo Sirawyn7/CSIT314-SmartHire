@@ -13,7 +13,7 @@ class CandidateRoutes:
         self.blueprint.add_url_rule("/candidate/profile", view_func=self.profile_page, methods=["GET"])
         self.blueprint.add_url_rule("/candidate/profile/edit", view_func=self.edit_profile_post, methods=["POST"])
         self.blueprint.add_url_rule("/candidate/applications", view_func=self.applications_page, methods=["GET"])
-        self.blueprint.add_url_rule("/candidate/applications/<int:application_id>/delete", view_func=self.delete_application_post, methods=["POST"])
+        self.blueprint.add_url_rule("/candidate/applications/<int:application_id>/withdraw", view_func=self.withdraw_application_post, methods=["POST"])
 
     def profile_page(self):
         """Renders the candidate profile page."""
@@ -80,8 +80,8 @@ class CandidateRoutes:
             applications=applications,
         )
     
-    def delete_application_post(self, application_id):
-        """Deletes an application owned by the logged-in candidate."""
+    def withdraw_application_post(self, application_id):
+        """Marks an application as withdrawn for the logged-in candidate."""
         user_id = session.get("user_id")
         if not user_id:
             return redirect(url_for("auth.login_page"))
@@ -90,5 +90,9 @@ class CandidateRoutes:
         if not candidate:
             return redirect(url_for("auth.login_page"))
 
-        self.db.applications.delete_by_id_and_candidate_id(application_id, candidate["id"])
+        self.db.applications.update_status_by_id_and_candidate_id(
+            application_id,
+            candidate["id"],
+            "withdrawn",
+        )
         return redirect(url_for("candidate.applications_page"))

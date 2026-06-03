@@ -19,7 +19,7 @@ class ApplicationsDatabase:
                 candidate_id INTEGER NOT NULL,
                 cover_letter TEXT,
                 status TEXT NOT NULL DEFAULT 'pending'
-                    CHECK(status IN ('pending', 'reviewed', 'rejected', 'accepted')),
+                    CHECK(status IN ('pending', 'reviewed', 'rejected', 'accepted', 'withdrawn')),
                 applied_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
                 FOREIGN KEY (job_id) REFERENCES jobs(id),
                 FOREIGN KEY (candidate_id) REFERENCES candidates(id),
@@ -66,7 +66,15 @@ class ApplicationsDatabase:
         existing = self.get_by_candidate_and_job(candidate_id, job_id)
 
         if existing:
-            self.update_cover_letter(existing["id"], cover_letter)
+            self.conn.execute(
+                """
+                UPDATE applications
+                SET cover_letter = ?, status = 'pending'
+                WHERE id = ?
+                """,
+                (cover_letter, existing["id"]),
+            )
+            self.conn.commit()
             return self.get_by_candidate_and_job(candidate_id, job_id), False
 
         self.create(candidate_id, job_id, cover_letter)
@@ -94,13 +102,14 @@ class ApplicationsDatabase:
         return [dict(row) for row in rows]
     
     
-    def delete_by_id_and_candidate_id(self, application_id, candidate_id):
-        """Deletes an application only if it belongs to the given candidate."""
+    def update_status_by_id_and_candidate_id(self, application_id, candidate_id, status):
+        """Updates an application status only if it belongs to the given candidate."""
         self.conn.execute(
             """
-            DELETE FROM applications
+            UPDATE applications
+            SET status = ?
             WHERE id = ? AND candidate_id = ?
             """,
-            (application_id, candidate_id),
+            (status, application_id, candidate_id),
         )
         self.conn.commit()

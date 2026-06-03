@@ -1706,6 +1706,7 @@ body.modal-open {
   background: #ecfdf3;
   color: #166534;
   border: 1px solid #bbf7d0;
+  margin-bottom: 1rem;
 }
 
 .job-application-alert-error {
@@ -1936,4 +1937,24 @@ body.modal-open {
 
 .btn-view:hover {
   background: var(--color-blue-hover, #0b5177);
+}
+
+.candidate-empty-state-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 0.5rem;
+  padding: 0.7rem 1rem;
+  background-color: #0f1f5c;
+  color: #ffffff;
+  border-radius: 10px;
+  text-decoration: none;
+  font-size: 0.92rem;
+  font-weight: 700;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.candidate-empty-state-btn:hover {
+  background-color: #1a2f7a;
+  transform: translateY(-1px);
 }

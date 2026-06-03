@@ -94,7 +94,7 @@
 
             {% elif is_candidate and candidate %}
             <div class="job-application-actions">
-                {% if application %}
+                {% if application and application.status != 'withdrawn' %}
                 <p class="job-application-help">
                     You have already applied for this role. You can reopen the form and update your details.
                 </p>
@@ -106,7 +106,11 @@
                     Review and edit your details before submitting your application.
                 </p>
                 <button type="button" class="job-apply-btn" data-modal-open="job-application-modal">
+                    {% if application and application.status == 'withdrawn' %}
+                    Apply Again
+                    {% else %}
                     Apply Now
+                    {% endif %}
                 </button>
                 {% endif %}
             </div>
@@ -135,7 +139,11 @@
     >
         <div class="candidate-profile-modal-header">
             <h2 id="job-application-modal-title">
-                {% if application %}Edit Application{% else %}Apply for {{ job.title }}{% endif %}
+                {% if application and application.status != 'withdrawn' %}
+                    Edit Application
+                {% else %}
+                    Apply for {{ job.title }}
+                {% endif %}
             </h2>
             <button
                 type="button"
@@ -296,7 +304,13 @@
             <div class="candidate-profile-modal-footer">
                 <button type="button" class="candidate-profile-cancel-btn" data-modal-close>Cancel</button>
                 <button type="submit" class="auth-btn candidate-profile-save-btn">
-                    {% if application %}Save Application{% else %}Submit Application{% endif %}
+                    {% if application and application.status == 'withdrawn' %}
+                        Submit Application
+                    {% elif application %}
+                        Save Application
+                    {% else %}
+                        Submit Application
+                    {% endif %}
                 </button>
             </div>
         </form>

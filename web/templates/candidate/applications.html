@@ -11,7 +11,7 @@
         {{ profile.full_name if profile.full_name else 'Your Applications' }}
       </h1>
       <p class="candidate-profile-intro">
-        Review the jobs you have applied for, revisit the listing, or remove an application.
+        Review the jobs you have applied for, revisit the listing, or withdraw an application.
       </p>
     </div>
 
@@ -36,7 +36,7 @@
               <p class="candidate-application-company">{{ application.company_name }}</p>
             </div>
 
-            <span class="job-badge {% if application.is_active %}badge-active{% else %}badge-inactive{% endif %}">
+            <span class="job-badge {% if application.status == 'withdrawn' or not application.is_active %}badge-inactive{% else %}badge-active{% endif %}">
               {{ application.status|title }}
             </span>
           </div>
@@ -73,23 +73,25 @@
             {% endif %}
           </div>
 
-        <div class="candidate-application-actions">
+          <div class="candidate-application-actions">
             <a
               href="{{ url_for('jobs.job_details_page', job_id=application.job_id) }}"
               class="btn-view"
             >
-              Review Application
+              {{ 'Apply Again' if application.status == 'withdrawn' else 'Review Application' }}
             </a>
 
+            {% if application.status != 'withdrawn' %}
             <form
-                method="POST"
-                action="{{ url_for('candidate.delete_application_post', application_id=application.id) }}"
-                class="remove-application-form"
+              method="POST"
+              action="{{ url_for('candidate.withdraw_application_post', application_id=application.id) }}"
+              class="remove-application-form"
             >
               <button type="button" class="btn btn-danger" onclick="openRemoveApplicationModal(this)">
-                Remove Application
+                Withdraw Application
               </button>
             </form>
+            {% endif %}
           </div>
         </article>
       {% endfor %}
@@ -101,11 +103,9 @@
       </div>
       <div class="candidate-profile-copy">
         <p>You have not applied for any jobs yet.</p>
-        <p>
-          <a href="{{ url_for('jobs.jobs_page') }}" class="candidate-application-link">
-            Browse current job listings
+          <a href="{{ url_for('jobs.jobs_page') }}" class="candidate-empty-state-btn">
+            Browse Current Job Listings
           </a>
-        </p>
       </div>
     </section>
   {% endif %}
@@ -125,7 +125,7 @@
     aria-labelledby="remove-application-modal-title"
   >
     <div class="candidate-profile-modal-header">
-      <h2 id="remove-application-modal-title">Remove Application?</h2>
+      <h2 id="remove-application-modal-title">Withdraw Application?</h2>
       <button
         type="button"
         class="candidate-profile-modal-close"
@@ -138,7 +138,7 @@
 
     <div class="candidate-profile-modal-body">
       <p class="candidate-profile-intro" style="margin: 0;">
-        This application will be permanently removed from your applied jobs list.
+        This application will be marked as withdrawn, but your application history will be retained.
       </p>
     </div>
 
@@ -155,7 +155,7 @@
         id="remove-application-confirm-btn"
         class="candidate-application-remove-confirm-btn"
       >
-        Remove Application
+        Withdraw Application
       </button>
     </div>
   </div>
