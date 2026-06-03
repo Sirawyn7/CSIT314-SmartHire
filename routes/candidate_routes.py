@@ -12,6 +12,8 @@ class CandidateRoutes:
     def _register_routes(self):
         self.blueprint.add_url_rule("/candidate/profile", view_func=self.profile_page, methods=["GET"])
         self.blueprint.add_url_rule("/candidate/profile/edit", view_func=self.edit_profile_post, methods=["POST"])
+        self.blueprint.add_url_rule("/candidate/applications", view_func=self.applications_page, methods=["GET"])
+        self.blueprint.add_url_rule("/candidate/applications/<int:application_id>/withdraw", view_func=self.withdraw_application_post, methods=["POST"])
 
     def profile_page(self):
         """Renders the candidate profile page."""
@@ -59,3 +61,38 @@ class CandidateRoutes:
         )
 
         return redirect(url_for("candidate.profile_page", updated=1))
+    
+    def applications_page(self):
+        """Renders the logged-in candidate's applied jobs page."""
+        user_id = session.get("user_id")
+        if not user_id:
+            return redirect(url_for("auth.login_page"))
+
+        candidate = self.db.candidates.get_by_user_id(user_id)
+        if not candidate:
+            return redirect(url_for("auth.login_page"))
+
+        applications = self.db.applications.get_all_by_candidate_id(candidate["id"])
+
+        return render_template(
+            "candidate/applications.html",
+            candidate=candidate,
+            applications=applications,
+        )
+    
+    def withdraw_application_post(self, application_id):
+        """Marks an application as withdrawn for the logged-in candidate."""
+        user_id = session.get("user_id")
+        if not user_id:
+            return redirect(url_for("auth.login_page"))
+
+        candidate = self.db.candidates.get_by_user_id(user_id)
+        if not candidate:
+            return redirect(url_for("auth.login_page"))
+
+        self.db.applications.update_status_by_id_and_candidate_id(
+            application_id,
+            candidate["id"],
+            "withdrawn",
+        )
+        return redirect(url_for("candidate.applications_page"))

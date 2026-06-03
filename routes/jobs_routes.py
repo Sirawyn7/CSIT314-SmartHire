@@ -1,7 +1,5 @@
-
-
 import math
-from flask import Blueprint, render_template, request
+from flask import Blueprint, render_template, request, redirect, session, url_for
 from config import JOBS_PER_PAGE, WORK_MODES, EDUCATION_LEVELS, JOB_KEYWORD_FIELDS
 from core.search_core import SearchEngine
 
@@ -18,7 +16,7 @@ class JobRoutes:
     def _register_routes(self):
         self.blueprint.add_url_rule("/", view_func=self.jobs_page, methods=["GET"])
         self.blueprint.add_url_rule("/<int:job_id>", view_func=self.job_details_page, methods=["GET"])
-
+        self.blueprint.add_url_rule("/<int:job_id>/apply", view_func=self.apply_to_job, methods=["POST"])
 
     def jobs_page(self):
         """Renders the paginated job listings page with keyword, fuzzy, and filter search."""
@@ -89,4 +87,77 @@ class JobRoutes:
         job = self.db.jobs.get_by_id(job_id)
         if job is None:
             return render_template("error.html", message="Job not found."), 404
-        return render_template("employer/job_details.html", job=job)
+
+        user_id = session.get("user_id")
+        user_type = session.get("user_type")
+
+        candidate = None
+        application = None
+
+        if user_id and user_type == "candidate":
+            candidate = self.db.candidates.get_by_user_id(user_id)
+            if candidate:
+                application = self.db.applications.get_by_candidate_and_job(candidate["id"], job_id)
+
+        return render_template(
+            "employer/job_details.html",
+            job=job,
+            candidate=candidate,
+            application=application,
+            is_logged_in=bool(user_id),
+            is_candidate=(user_type == "candidate"),
+            applied=bool(request.args.get("applied")),
+            updated=bool(request.args.get("updated")),
+            apply_error=request.args.get("error", "").strip(),
+        )
+
+    def apply_to_job(self, job_id):
+        user_id = session.get("user_id")
+        user_type = session.get("user_type")
+
+        if not user_id:
+            return redirect(url_for("auth.login_page"))
+
+        if user_type != "candidate":
+            return redirect(url_for("jobs.job_details_page", job_id=job_id, error="Only candidates can apply for jobs."))
+
+        job = self.db.jobs.get_by_id(job_id)
+        if job is None:
+            return render_template("error.html", message="Job not found."), 404
+
+        if not job["is_active"]:
+            return redirect(url_for("jobs.job_details_page", job_id=job_id, error="This job is no longer accepting applications."))
+
+        candidate = self.db.candidates.get_by_user_id(user_id)
+        if not candidate:
+            return redirect(url_for("jobs.job_details_page", job_id=job_id, error="Candidate profile not found."))
+
+        full_name = (request.form.get("full_name") or "").strip()
+        if not full_name:
+            return redirect(url_for("jobs.job_details_page", job_id=job_id, error="Full name is required."))
+
+        self.db.candidates.update_by_user_id(
+            user_id,
+            {
+                "full_name": request.form.get("full_name"),
+                "phone": request.form.get("phone"),
+                "education": request.form.get("education"),
+                "field_of_study": request.form.get("field_of_study"),
+                "years_experience": request.form.get("years_experience"),
+                "skills": request.form.get("skills"),
+                "work_experience": request.form.get("work_experience"),
+                "preferred_work_mode": request.form.get("preferred_work_mode"),
+                "preferred_location": request.form.get("preferred_location"),
+            }
+        )
+
+        _, created = self.db.applications.create_or_update(
+            candidate["id"],
+            job_id,
+            request.form.get("cover_letter"),
+        )
+
+        if created:
+            return redirect(url_for("jobs.job_details_page", job_id=job_id, applied=1))
+
+        return redirect(url_for("jobs.job_details_page", job_id=job_id, updated=1))

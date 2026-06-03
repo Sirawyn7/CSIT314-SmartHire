@@ -86,6 +86,10 @@ document.addEventListener("DOMContentLoaded", () => {
     initPasswordToggles();
     initUserTypeToggle();
     initPasswordMatchValidation();
+    initCandidateProfileModal();
+    initEmployerDashboardModal();
+    initJobApplicationModal();
+    initRemoveApplicationModal();
 });
 
 function initCandidateProfileModal() {
@@ -122,14 +126,6 @@ function initCandidateProfileModal() {
     });
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-    initPasswordToggles();
-    initUserTypeToggle();
-    initPasswordMatchValidation();
-    initCandidateProfileModal();
-    initEmployerDashboardModal();
-});
-
 function initEmployerDashboardModal() {
     const modal = document.getElementById("employer-edit-modal");
     if (!modal) return;
@@ -162,4 +158,83 @@ function initEmployerDashboardModal() {
             closeModal();
         }
     });
+}
+
+function initJobApplicationModal() {
+    const modal = document.getElementById("job-application-modal");
+    if (!modal) return;
+
+    const openButton = document.querySelector('[data-modal-open="job-application-modal"]');
+    const closeButtons = modal.querySelectorAll("[data-modal-close]");
+
+    const openModal = () => {
+        modal.hidden = false;
+        modal.setAttribute("aria-hidden", "false");
+        document.body.classList.add("modal-open");
+    };
+
+    const closeModal = () => {
+        modal.hidden = true;
+        modal.setAttribute("aria-hidden", "true");
+        document.body.classList.remove("modal-open");
+    };
+
+    if (openButton) {
+        openButton.addEventListener("click", openModal);
+    }
+
+    closeButtons.forEach((button) => {
+        button.addEventListener("click", closeModal);
+    });
+
+    document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape" && !modal.hidden) {
+            closeModal();
+        }
+    });
+}
+
+let pendingRemoveApplicationForm = null;
+
+function initRemoveApplicationModal() {
+    const modal = document.getElementById("remove-application-modal");
+    if (!modal) return;
+
+    const closeButtons = modal.querySelectorAll("[data-remove-application-close]");
+    const confirmButton = document.getElementById("remove-application-confirm-btn");
+
+    const closeModal = () => {
+        pendingRemoveApplicationForm = null;
+        modal.hidden = true;
+        modal.setAttribute("aria-hidden", "true");
+        document.body.classList.remove("modal-open");
+    };
+
+    closeButtons.forEach((button) => {
+        button.addEventListener("click", closeModal);
+    });
+
+    if (confirmButton) {
+        confirmButton.addEventListener("click", () => {
+            if (pendingRemoveApplicationForm) {
+                pendingRemoveApplicationForm.submit();
+            }
+        });
+    }
+
+    document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape" && !modal.hidden) {
+            closeModal();
+        }
+    });
+}
+
+function openRemoveApplicationModal(button) {
+    const modal = document.getElementById("remove-application-modal");
+    if (!modal) return;
+
+    pendingRemoveApplicationForm = button.closest(".remove-application-form");
+    modal.hidden = false;
+    modal.setAttribute("aria-hidden", "false");
+    document.body.classList.add("modal-open");
 }
