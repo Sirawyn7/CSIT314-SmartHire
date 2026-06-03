@@ -27,7 +27,6 @@
     </a>
   </div>
 
-  <!-- Active Jobs Tab -->
   {% if tab == 'active' %}
   <section class="employer-dashboard-panel employer-dashboard-panel-wide">
     <div class="employer-dashboard-panel-head">
@@ -61,12 +60,11 @@
       </div>
     {% else %}
       <div class="employer-dashboard-copy job-mgmt-empty">
-        <p>You have no active job listings. Post a new job to get started.</p>
+        <p>You have no active job listings.</p>
       </div>
     {% endif %}
   </section>
 
-  <!-- Inactive / Historical Jobs Tab -->
   {% elif tab == 'inactive' %}
   <section class="employer-dashboard-panel employer-dashboard-panel-wide">
     <div class="employer-dashboard-panel-head">
