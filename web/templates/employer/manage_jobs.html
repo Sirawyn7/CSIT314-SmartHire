@@ -1,0 +1,167 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="employer-dashboard-page">
+  <header class="employer-dashboard-header">
+    <div>
+      <p class="employer-dashboard-eyebrow">Job Management</p>
+      <h1 class="employer-dashboard-title">Manage Your Job Listings</h1>
+    </div>
+    <a href="{{ url_for('employer.dashboard') }}" class="nav-cta">Back to Dashboard</a>
+  </header>
+</section>
+
+<!-- Deactivation Confirmation Modal -->
+<div id="deactivate-modal" style="display:none; position:fixed; inset:0; z-index:1000; background:rgba(0,0,0,0.45); display:none; align-items:center; justify-content:center;">
+  <div style="background:var(--color-surface, #fff); border-radius:0.75rem; padding:2rem; max-width:420px; width:90%; box-shadow:0 12px 32px rgba(0,0,0,0.18);">
+    <h3 style="margin-bottom:0.75rem; font-size:1.1rem;">Deactivate Job Listing?</h3>
+    <p style="color:var(--color-text-muted, #64748b); margin-bottom:1.5rem; font-size:0.95rem;">This job will no longer appear in public listings. You can reactivate it at any time from the Historical Jobs tab.</p>
+    <div style="display:flex; gap:0.75rem; justify-content:flex-end;">
+      <button onclick="closeModal()" style="padding:0.5rem 1.2rem; border-radius:0.5rem; border:1px solid var(--color-border, #e2e8f0); background:transparent; cursor:pointer; font-size:0.9rem;">Cancel</button>
+      <button id="modal-confirm-btn" onclick="submitDeactivate()" style="padding:0.5rem 1.2rem; border-radius:0.5rem; background:var(--color-error, #a12c7b); color:#fff; border:none; cursor:pointer; font-size:0.9rem; font-weight:600;">Deactivate</button>
+    </div>
+  </div>
+</div>
+
+<div class="employer-dashboard-layout">
+
+  <!-- Tab Navigation -->
+  <div class="job-mgmt-tabs">
+    <a href="{{ url_for('employer.manage_jobs', tab='active') }}"
+       class="job-mgmt-tab {% if tab == 'active' %}job-mgmt-tab--active{% endif %}">
+      Active Jobs
+      <span class="job-mgmt-tab-count">{{ active_jobs | length }}</span>
+    </a>
+    <a href="{{ url_for('employer.manage_jobs', tab='inactive') }}"
+       class="job-mgmt-tab {% if tab == 'inactive' %}job-mgmt-tab--active{% endif %}">
+      Historical Jobs
+      <span class="job-mgmt-tab-count">{{ inactive_jobs | length }}</span>
+    </a>
+  </div>
+
+  <!-- Active Jobs Tab -->
+  {% if tab == 'active' %}
+  <section class="employer-dashboard-panel employer-dashboard-panel-wide">
+    <div class="employer-dashboard-panel-head">
+      <h2>Active Listings</h2>
+    </div>
+
+    {% if active_jobs %}
+      <div class="employer-dashboard-jobs">
+        {% for job in active_jobs %}
+          <article class="employer-dashboard-job-card">
+            <div class="employer-dashboard-job-top">
+              <h3 class="employer-dashboard-job-title">{{ job.title }}</h3>
+              <span class="employer-dashboard-job-status">Active</span>
+            </div>
+            <p class="employer-dashboard-job-meta">
+              {{ job.location if job.location else 'Location not provided' }}
+              {% if job.work_mode %} | {{ job.work_mode }}{% endif %}
+              {% if job.years_experience_required %} | {{ job.years_experience_required }}+ yrs exp{% endif %}
+            </p>
+            <p class="employer-dashboard-job-description">{{ job.description }}</p>
+            <p class="job-mgmt-posted">Posted: {{ job.created_at }}</p>
+            <div class="job-mgmt-actions">
+              <a href="{{ url_for('jobs.job_details_page', job_id=job.id) }}" class="btn-view">View</a>
+              <form class="deactivate-form" data-action="{{ url_for('employer.deactivate_job', job_id=job.id) }}">
+                <button type="button" class="btn btn-danger" onclick="openModal(this)">Deactivate</button>
+              </form>
+            </div>
+          </article>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="employer-dashboard-copy job-mgmt-empty">
+        <p>You have no active job listings.</p>
+      </div>
+    {% endif %}
+  </section>
+
+  <!-- Inactive / Historical Jobs Tab -->
+  {% elif tab == 'inactive' %}
+  <section class="employer-dashboard-panel employer-dashboard-panel-wide">
+    <div class="employer-dashboard-panel-head">
+      <h2>Historical Listings</h2>
+    </div>
+
+    {% if inactive_jobs %}
+      <div class="employer-dashboard-jobs">
+        {% for job in inactive_jobs %}
+          <article class="employer-dashboard-job-card employer-dashboard-job-card--inactive">
+            <div class="employer-dashboard-job-top">
+              <h3 class="employer-dashboard-job-title">{{ job.title }}</h3>
+              <span class="employer-dashboard-job-status employer-dashboard-job-status--inactive">Inactive</span>
+            </div>
+            <p class="employer-dashboard-job-meta">
+              {{ job.location if job.location else 'Location not provided' }}
+              {% if job.work_mode %} | {{ job.work_mode }}{% endif %}
+            </p>
+            <p class="employer-dashboard-job-description">{{ job.description }}</p>
+            <p class="job-mgmt-posted">Posted: {{ job.created_at }}</p>
+            <div class="job-mgmt-actions">
+              <form method="POST" action="{{ url_for('employer.reactivate_job', job_id=job.id) }}">
+                <button type="submit" class="btn btn-primary">Reactivate</button>
+              </form>
+            </div>
+          </article>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="employer-dashboard-copy job-mgmt-empty">
+        <p>No historical jobs found. Deactivated jobs will appear here.</p>
+      </div>
+    {% endif %}
+  </section>
+  {% endif %}
+
+</div>
+
+<style>
+.btn-view {
+  display: inline-block;
+  padding: 0.35rem 0.9rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #fff;
+  background: var(--color-blue, #006494);
+  border-radius: var(--radius-md, 0.5rem);
+  text-decoration: none;
+  transition: background 0.18s;
+}
+.btn-view:hover {
+  background: var(--color-blue-hover, #0b5177);
+}
+</style>
+
+<script>
+  var pendingForm = null;
+
+  function openModal(btn) {
+    pendingForm = btn.closest('.deactivate-form');
+    var modal = document.getElementById('deactivate-modal');
+    modal.style.display = 'flex';
+  }
+
+  function closeModal() {
+    pendingForm = null;
+    var modal = document.getElementById('deactivate-modal');
+    modal.style.display = 'none';
+  }
+
+  function submitDeactivate() {
+    if (pendingForm) {
+      var action = pendingForm.getAttribute('data-action');
+      var form = document.createElement('form');
+      form.method = 'POST';
+      form.action = action;
+      document.body.appendChild(form);
+      form.submit();
+    }
+  }
+
+  document.getElementById('deactivate-modal').addEventListener('click', function(e) {
+    if (e.target === this) closeModal();
+  });
+</script>
+
+{% endblock %}

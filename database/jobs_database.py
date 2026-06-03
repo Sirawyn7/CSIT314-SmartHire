@@ -142,3 +142,26 @@ class JobsDatabase:
                 if stripped:
                     skills.add(stripped)
         return sorted(skills)
+    
+    def get_all_by_employer_id(self, employer_id):
+        """Returns all jobs (active and inactive) for a given employer."""
+        rows = self.conn.execute(
+            """
+            SELECT * FROM jobs
+            WHERE employer_id = ?
+            ORDER BY datetime(created_at) DESC, id DESC
+            """,
+            (employer_id,)
+        ).fetchall()
+        return [dict(row) for row in rows]
+
+    def set_active_status(self, job_id, employer_id, status):
+        """Sets is_active for a job, only if it belongs to the given employer."""
+        self.conn.execute(
+            """
+            UPDATE jobs SET is_active = ?
+            WHERE id = ? AND employer_id = ?
+            """,
+            (status, job_id, employer_id)
+        )
+        self.conn.commit()

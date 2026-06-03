@@ -13,106 +13,100 @@
       </h1>
     </div>
   </header>
+</section>
+
+<div class="employer-dashboard-layout">
+
+  <section class="employer-dashboard-panel employer-dashboard-panel-wide">
+    <div class="employer-dashboard-panel-head">
+      <h2>Company Overview</h2>
+    </div>
+    <div class="employer-dashboard-copy">
+      <p>
+        {% if profile.company_description %}
+          {{ profile.company_description }}
+        {% else %}
+          Add a company description to give candidates a clearer picture of your business and brand.
+        {% endif %}
+      </p>
+    </div>
   </section>
 
-  <div class="employer-dashboard-layout">
-    <section class="employer-dashboard-panel employer-dashboard-panel-wide">
-      <div class="employer-dashboard-panel-head">
-        <h2>Company Overview</h2>
-      </div>
-
-      <div class="employer-dashboard-copy">
-        <p>
-          {% if profile.company_description %}
-            {{ profile.company_description }}
-          {% else %}
-            Add a company description to give candidates a clearer picture of your business and brand.
-          {% endif %}
-        </p>
-      </div>
-    </section>
-
-    <section class="employer-dashboard-panel employer-dashboard-panel-wide">
-      <div class="employer-dashboard-panel-head">
-        <h2>Company Details</h2>
-      </div>
-
-      <dl class="employer-dashboard-details">
-
-        <div class="employer-dashboard-detail-row">
-          <dt>Website</dt>
-          <dd>
-            {% if profile.weburl %}
-              <a href="{{ profile.weburl }}" class="employer-dashboard-link" target="_blank" rel="noreferrer">
-                {{ profile.weburl }}
-              </a>
-            {% else %}
-              Not provided
-            {% endif %}
-          </dd>
-        </div>
-
-        <div class="employer-dashboard-detail-row">
-          <dt>Contact Email</dt>
-          <dd>{{ profile.contact_email if profile.contact_email else 'Not provided' }}</dd>
-        </div>
-
-        <div class="employer-dashboard-detail-row">
-          <dt>Location</dt>
-          <dd>{{ profile.location if profile.location else 'Not provided' }}</dd>
-        </div>
-
-        <div class="employer-dashboard-detail-row">
-          <dt>Industry</dt>
-          <dd>{{ profile.industry if profile.industry else 'Not provided' }}</dd>
-      </dl>
-    </section>
-
-    <section class="employer-dashboard-panel employer-dashboard-panel-wide">
+  <section class="employer-dashboard-panel employer-dashboard-panel-wide">
     <div class="employer-dashboard-panel-head">
-        <h2>Recent Job Listings</h2>
+      <h2>Company Details</h2>
+    </div>
+    <dl class="employer-dashboard-details">
+      <div class="employer-dashboard-detail-row">
+        <dt>Website</dt>
+        <dd>
+          {% if profile.weburl %}
+            <a href="{{ profile.weburl }}" class="employer-dashboard-link" target="_blank" rel="noreferrer">
+              {{ profile.weburl }}
+            </a>
+          {% else %}
+            Not provided
+          {% endif %}
+        </dd>
+      </div>
+      <div class="employer-dashboard-detail-row">
+        <dt>Contact Email</dt>
+        <dd>{{ profile.contact_email if profile.contact_email else 'Not provided' }}</dd>
+      </div>
+      <div class="employer-dashboard-detail-row">
+        <dt>Location</dt>
+        <dd>{{ profile.location if profile.location else 'Not provided' }}</dd>
+      </div>
+      <div class="employer-dashboard-detail-row">
+        <dt>Industry</dt>
+        <dd>{{ profile.industry if profile.industry else 'Not provided' }}</dd>
+      </div>
+    </dl>
+  </section>
+
+  <section class="employer-dashboard-panel employer-dashboard-panel-wide">
+    <div class="employer-dashboard-panel-head" style="display: flex; justify-content: space-between; align-items: center; padding-right: 1.5rem; margin-bottom: 1rem;">
+      <h2>Recent Job Listings</h2>
+      <a href="{{ url_for('employer.manage_jobs') }}" class="nav-cta">Manage Jobs</a>
     </div>
 
     {% if recent_jobs %}
-        <div class="employer-dashboard-jobs">
+      <div class="employer-dashboard-jobs">
         {% for job in recent_jobs %}
-            <article class="employer-dashboard-job-card">
+          <article class="employer-dashboard-job-card">
             <div class="employer-dashboard-job-top">
-                <h3 class="employer-dashboard-job-title">{{ job.title }}</h3>
-                <span class="employer-dashboard-job-status">
+              <h3 class="employer-dashboard-job-title">{{ job.title }}</h3>
+              <span class="employer-dashboard-job-status">
                 {{ 'Active' if job.is_active else 'Inactive' }}
-                </span>
+              </span>
             </div>
-
             <p class="employer-dashboard-job-meta">
-                {{ job.location if job.location else 'Location not provided' }}
-                {% if job.work_mode %} | {{ job.work_mode }}{% endif %}
+              {{ job.location if job.location else 'Location not provided' }}
+              {% if job.work_mode %} | {{ job.work_mode }}{% endif %}
             </p>
-
             <p class="employer-dashboard-job-description">
-                {{ job.description }}
+              {{ job.description }}
             </p>
-            </article>
+          </article>
         {% endfor %}
-        </div>
+      </div>
     {% else %}
-        <div class="employer-dashboard-copy">
+      <div class="employer-dashboard-copy">
         <p>No recent job listings found for this employer.</p>
-        </div>
+      </div>
     {% endif %}
+  </section>
+
+  {% if not employer %}
+    <section class="employer-dashboard-panel employer-dashboard-panel-wide">
+      <div class="employer-dashboard-panel-head">
+        <h2>No Employer Profile Found</h2>
+      </div>
+      <div class="employer-dashboard-copy">
+        <p>This account is logged in, but no employer profile is linked to the current session yet.</p>
+      </div>
     </section>
+  {% endif %}
 
-    {% if not employer %}
-      <section class="employer-dashboard-panel employer-dashboard-panel-wide">
-        <div class="employer-dashboard-panel-head">
-          <h2>No Employer Profile Found</h2>
-        </div>
-
-        <div class="employer-dashboard-copy">
-          <p>This account is logged in, but no employer profile is linked to the current session yet.</p>
-        </div>
-      </section>
-    {% endif %}
-  </div>
-</section>
+</div>
 {% endblock %}
