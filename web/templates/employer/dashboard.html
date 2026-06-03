@@ -8,15 +8,30 @@
     <div>
       <p class="employer-dashboard-eyebrow">Employer Dashboard</p>
       <h1 class="employer-dashboard-title">
-        {{ profile.company_name if profile.company_name else 'Your Company Profile' }} 
-        {% if is_member %}<span class="member-badge">Member</span>  {% else %} <span class="member-badge member-badge-standard">Non-member</span>{% endif %}
+        {{ profile.company_name if profile.company_name else 'Your Company Profile' }}
+        {% if is_member %}<span class="member-badge">Member</span>{% else %}<span class="member-badge member-badge-standard">Non-member</span>{% endif %}
       </h1>
     </div>
+
+    <div class="employer-dashboard-header-actions">
+      <button
+        type="button"
+        class="employer-dashboard-edit-btn"
+        data-modal-open="employer-edit-modal"
+      >
+        Edit Profile
+      </button>
+    </div>
   </header>
+
+  {% if updated %}
+    <div class="employer-dashboard-success">
+      Employer profile updated successfully.
+    </div>
+  {% endif %}
 </section>
 
 <div class="employer-dashboard-layout">
-
   <section class="employer-dashboard-panel employer-dashboard-panel-wide">
     <div class="employer-dashboard-panel-head">
       <h2>Company Overview</h2>
@@ -75,7 +90,11 @@
         {% for job in recent_jobs %}
           <article class="employer-dashboard-job-card">
             <div class="employer-dashboard-job-top">
-              <h3 class="employer-dashboard-job-title">{{ job.title }}</h3>
+              <h3 class="employer-dashboard-job-title">
+                <a href="{{ url_for('jobs.job_details_page', job_id=job.id) }}" class="employer-dashboard-job-title-link">
+                  {{ job.title }}
+                </a>
+              </h3>
               <span class="employer-dashboard-job-status">
                 {{ 'Active' if job.is_active else 'Inactive' }}
               </span>
@@ -96,17 +115,85 @@
       </div>
     {% endif %}
   </section>
+</div>
 
-  {% if not employer %}
-    <section class="employer-dashboard-panel employer-dashboard-panel-wide">
-      <div class="employer-dashboard-panel-head">
-        <h2>No Employer Profile Found</h2>
-      </div>
-      <div class="employer-dashboard-copy">
-        <p>This account is logged in, but no employer profile is linked to the current session yet.</p>
-      </div>
-    </section>
-  {% endif %}
+<div
+  id="employer-edit-modal"
+  class="employer-dashboard-modal"
+  hidden
+  aria-hidden="true"
+>
+  <div class="employer-dashboard-modal-backdrop" data-modal-close></div>
 
+  <div
+    class="employer-dashboard-modal-dialog"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="employer-edit-modal-title"
+  >
+    <div class="employer-dashboard-modal-header">
+      <h2 id="employer-edit-modal-title">Edit Employer Profile</h2>
+      <button type="button" class="employer-dashboard-modal-close" aria-label="Close" data-modal-close>
+        ×
+      </button>
+    </div>
+
+    <form action="{{ url_for('employer.edit_dashboard_post') }}" method="POST">
+      <div class="employer-dashboard-modal-body">
+        <div class="auth-field">
+          <label class="auth-label" for="company_name">Company Name</label>
+          <div class="auth-input-wrapper">
+            <span class="auth-icon">🏢</span>
+            <input class="auth-input" type="text" id="company_name" name="company_name" value="{{ profile.company_name if profile.company_name else '' }}" required>
+          </div>
+        </div>
+
+        <div class="auth-field">
+          <label class="auth-label" for="company_description">Company Description</label>
+          <div class="auth-input-wrapper">
+            <span class="auth-icon">📝</span>
+            <input class="auth-input" type="text" id="company_description" name="company_description" value="{{ profile.company_description if profile.company_description else '' }}">
+          </div>
+        </div>
+
+        <div class="auth-field">
+          <label class="auth-label" for="industry">Industry</label>
+          <div class="auth-input-wrapper">
+            <span class="auth-icon">🏭</span>
+            <input class="auth-input" type="text" id="industry" name="industry" value="{{ profile.industry if profile.industry else '' }}">
+          </div>
+        </div>
+
+        <div class="auth-field">
+          <label class="auth-label" for="location">Location</label>
+          <div class="auth-input-wrapper">
+            <span class="auth-icon">📍</span>
+            <input class="auth-input" type="text" id="location" name="location" value="{{ profile.location if profile.location else '' }}">
+          </div>
+        </div>
+
+        <div class="auth-field">
+          <label class="auth-label" for="weburl">Website URL</label>
+          <div class="auth-input-wrapper">
+            <span class="auth-icon">🌐</span>
+            <input class="auth-input" type="text" id="weburl" name="weburl" value="{{ profile.weburl if profile.weburl else '' }}">
+          </div>
+        </div>
+
+        <div class="auth-field">
+          <label class="auth-label" for="contact_email">Contact Email</label>
+          <div class="auth-input-wrapper">
+            <span class="auth-icon">✉</span>
+            <input class="auth-input" type="email" id="contact_email" name="contact_email" value="{{ profile.contact_email if profile.contact_email else '' }}">
+          </div>
+        </div>
+      </div>
+
+      <div class="employer-dashboard-modal-footer">
+        <button type="button" class="employer-dashboard-cancel-btn" data-modal-close>Cancel</button>
+        <button type="submit" class="auth-btn employer-dashboard-save-btn">Save Changes</button>
+      </div>
+    </form>
+  </div>
 </div>
 {% endblock %}

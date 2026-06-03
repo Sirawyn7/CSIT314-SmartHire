@@ -12,6 +12,7 @@ class EmployerRoutes:
 
     def _register_routes(self):
         self.blueprint.add_url_rule("/employer/dashboard", view_func=self.dashboard, methods=["GET"])
+        self.blueprint.add_url_rule("/employer/dashboard/edit", view_func=self.edit_dashboard_post, methods=["POST"])
         self.blueprint.add_url_rule("/employer/jobs", view_func=self.manage_jobs, methods=["GET"])
         self.blueprint.add_url_rule("/employer/jobs/<int:job_id>/deactivate", view_func=self.deactivate_job, methods=["POST"])
         self.blueprint.add_url_rule("/employer/jobs/<int:job_id>/reactivate", view_func=self.reactivate_job, methods=["POST"])
@@ -35,8 +36,33 @@ class EmployerRoutes:
             "employer/dashboard.html",
             employer=employer,
             recent_jobs=recent_jobs,
-            is_member=is_member
+            is_member=is_member,
+            updated=bool(request.args.get("updated"))
         )
+    
+    def edit_dashboard_post(self):
+        """Updates the logged-in employer profile."""
+        user_id = session.get("user_id")
+        if not user_id:
+            return redirect(url_for("auth.login_page"))
+
+        employer = self.db.employers.get_by_user_id(user_id)
+        if not employer:
+            return redirect(url_for("auth.login_page"))
+
+        self.db.employers.update_by_user_id(
+            user_id,
+            {
+                "company_name": request.form.get("company_name"),
+                "company_description": request.form.get("company_description"),
+                "industry": request.form.get("industry"),
+                "location": request.form.get("location"),
+                "weburl": request.form.get("weburl"),
+                "contact_email": request.form.get("contact_email"),
+            }
+        )
+
+        return redirect(url_for("employer.dashboard", updated=1))
         
     def manage_jobs(self):
         user_id = session.get("user_id")

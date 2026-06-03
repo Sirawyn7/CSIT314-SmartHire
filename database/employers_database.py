@@ -71,3 +71,29 @@ class EmployersDatabase:
             "SELECT * FROM employers"
         ).fetchall()
         return [dict(row) for row in rows]
+    
+    def update_by_user_id(self, user_id, data):
+        """Updates an employer profile by user_id."""
+        self.conn.execute(
+            """
+            UPDATE employers
+            SET
+                company_name = ?,
+                company_description = ?,
+                industry = ?,
+                location = ?,
+                weburl = ?,
+                contact_email = ?
+            WHERE user_id = ?
+            """,
+            (
+                data.get("company_name"),
+                data.get("company_description"),
+                data.get("industry"),
+                data.get("location"),
+                data.get("weburl"),
+                data.get("contact_email"),
+                user_id,
+            )
+        )
+        self.conn.commit()
