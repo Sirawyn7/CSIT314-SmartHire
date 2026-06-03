@@ -1435,3 +1435,96 @@ body.modal-open {
     font-size: 1.5rem;
     color: white;
 }
+
+/* ── Job Management Page ── */
+.job-mgmt-tabs {
+  display: flex;
+  gap: 0;
+  border-bottom: 2px solid var(--color-border, #e2e8f0);
+  margin-bottom: 1.5rem;
+}
+
+.job-mgmt-tab {
+  padding: 0.75rem 1.5rem;
+  font-weight: 500;
+  color: var(--color-text-muted, #64748b);
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: color 0.2s, border-color 0.2s;
+}
+
+.job-mgmt-tab:hover {
+  color: var(--color-primary, #01696f);
+}
+
+.job-mgmt-tab--active {
+  color: var(--color-primary, #01696f);
+  border-bottom-color: var(--color-primary, #01696f);
+  font-weight: 600;
+}
+
+.job-mgmt-tab-count {
+  background: var(--color-surface-offset, #f1f5f9);
+  color: var(--color-text-muted, #64748b);
+  font-size: 0.75rem;
+  padding: 0.1rem 0.5rem;
+  border-radius: 9999px;
+  font-weight: 600;
+}
+
+.job-mgmt-tab--active .job-mgmt-tab-count {
+  background: var(--color-primary-highlight, #cedcd8);
+  color: var(--color-primary, #01696f);
+}
+
+.job-mgmt-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.job-mgmt-posted {
+  font-size: 0.78rem;
+  color: var(--color-text-muted, #64748b);
+  margin-top: 0.5rem;
+}
+
+.job-mgmt-empty {
+  padding: 2rem 0;
+  text-align: center;
+  color: var(--color-text-muted, #64748b);
+}
+
+.employer-dashboard-job-card--inactive {
+  opacity: 0.7;
+}
+
+.employer-dashboard-job-status--inactive {
+  background: var(--color-surface-offset, #f1f5f9);
+  color: var(--color-text-muted, #64748b);
+}
+
+.btn-danger {
+  background: var(--color-error, #a12c7b);
+  color: #fff;
+  border: none;
+  padding: 0.4rem 0.9rem;
+  border-radius: var(--radius-md, 0.5rem);
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background 0.18s;
+}
+
+.btn-danger:hover {
+  background: var(--color-error-hover, #7d1e5e);
+}
+
+.btn-sm {
+  padding: 0.35rem 0.8rem;
+  font-size: 0.82rem;
+}
