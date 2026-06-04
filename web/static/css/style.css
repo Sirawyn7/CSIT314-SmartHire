@@ -2109,3 +2109,45 @@ body.modal-open {
     justify-content: flex-start;
   }
 }
+
+/* Keep recommendation cards aligned row-by-row */
+.employer-applications-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  align-items: stretch;
+}
+
+.employer-application-card {
+  display: flex;
+  flex-direction: column;
+  height: 95%;
+}
+
+/* Make each 2-column info grid inside a card line up consistently */
+.employer-application-card .candidate-profile-preferences {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  align-items: stretch;
+}
+
+/* Give each tile a stable row height */
+.employer-application-card .candidate-profile-summary-card {
+  min-height: 50px;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+/* Reserve a bit more room for wrapping values like skills/email */
+.employer-application-card .candidate-profile-preference-value {
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+/* Keep long text sections visually consistent */
+.employer-application-card .application-preview-text {
+  min-height: 62px;
+}
