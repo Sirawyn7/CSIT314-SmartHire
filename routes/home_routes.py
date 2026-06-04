@@ -20,11 +20,7 @@ class HomeRoutes:
         """
         Register homepage endpoints.
         """
-        self.blueprint.add_url_rule(
-            "/home",
-            view_func=self.home_page,
-            methods=["GET"]
-        )
+        self.blueprint.add_url_rule("/home", view_func=self.home_page, methods=["GET"])
 
     def home_page(self):
         """
