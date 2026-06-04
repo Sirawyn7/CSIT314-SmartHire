@@ -106,7 +106,7 @@
             <p class="job-mgmt-posted">Posted: {{ job.created_at }}</p>
             <div class="job-mgmt-actions">
               <form method="POST" action="{{ url_for('employer.reactivate_job', job_id=job.id) }}">
-                <button type="submit" class="btn btn-primary">Reactivate</button>
+                <button type="submit" class="candidate-application-btn">Reactivate</button>
               </form>
             </div>
           </article>

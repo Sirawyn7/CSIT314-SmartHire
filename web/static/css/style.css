@@ -1657,7 +1657,8 @@ body.modal-open {
 }
 
 .employer-dashboard-job-card--inactive {
-  opacity: 0.7;
+  background-color: #ffffff;
+  border-color: #e5e7eb;
 }
 
 .employer-dashboard-job-status--inactive {
