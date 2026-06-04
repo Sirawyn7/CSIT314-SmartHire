@@ -14,7 +14,7 @@
     </div>
 
     <div class="candidate-profile-header-actions">
-      <a
+      
         href="{{ url_for('candidate.applications_page') }}"
         class="candidate-profile-applications-btn"
       >
@@ -87,25 +87,25 @@
       </dl>
     </section>
 
-  <section class="candidate-profile-panel">
-    <div class="candidate-profile-panel-head">
-      <h2>Work Experience</h2>
-    </div>
+    <section class="candidate-profile-panel">
+      <div class="candidate-profile-panel-head">
+        <h2>Work Experience</h2>
+      </div>
 
-    <div class="candidate-profile-copy">
-      {% if profile.work_experience %}
-        {% set experiences = profile.work_experience.split(',') %}
-        {% for experience in experiences %}
-          {% set item = experience.strip() %}
-          {% if item %}
-            <p>{{ item }}</p>
-          {% endif %}
-        {% endfor %}
-      {% else %}
-        <p>Not provided</p>
-      {% endif %}
-    </div>
-  </section>
+      <div class="candidate-profile-copy">
+        {% if profile.work_experience %}
+          {% set experiences = profile.work_experience.split(',') %}
+          {% for experience in experiences %}
+            {% set item = experience.strip() %}
+            {% if item %}
+              <p>{{ item }}</p>
+            {% endif %}
+          {% endfor %}
+        {% else %}
+          <p>Not provided</p>
+        {% endif %}
+      </div>
+    </section>
 
     <section class="candidate-profile-panel candidate-profile-panel-wide">
       <div class="candidate-profile-panel-head">
@@ -128,6 +128,50 @@
         </div>
       </div>
     </section>
+
+    <section class="candidate-profile-panel candidate-profile-panel-wide">
+      <div class="candidate-profile-panel-head">
+        <h2>Membership</h2>
+      </div>
+
+      <div class="candidate-profile-membership">
+        {% if is_member %}
+          {% if membership %}
+            <div class="candidate-profile-preferences">
+              <div class="candidate-profile-summary-card">
+                <span class="candidate-profile-preference-label">Next Payment Due</span>
+                <span class="candidate-profile-preference-value">{{ membership.next_due_date }}</span>
+              </div>
+
+              <div class="candidate-profile-summary-card">
+                <span class="candidate-profile-preference-label">Grace Period Ends</span>
+                <span class="candidate-profile-preference-value">{{ membership.grace_deadline }}</span>
+              </div>
+
+              <div class="candidate-profile-summary-card">
+                <span class="candidate-profile-preference-label">Monthly Rate</span>
+                <span class="candidate-profile-preference-value">${{ "%.2f"|format(membership.price) }}</span>
+              </div>
+            </div>
+
+            {% if membership.is_payment_overdue %}
+              <p class="candidate-profile-membership-warning">Your payment is overdue. Please pay to retain membership access.</p>
+            {% elif membership.is_current_period_paid %}
+              <p class="candidate-profile-membership-ok">Your membership is up to date.</p>
+            {% else %}
+              <p class="candidate-profile-membership-due">A payment is due for the current period.</p>
+            {% endif %}
+          {% endif %}
+        {% else %}
+          <p class="candidate-profile-membership-inactive">You do not currently have an active membership. Upgrade to receive unlimited recommendations.</p>
+        {% endif %}
+
+        <a href="{{ url_for('membership.pay_page') }}" class="candidate-profile-applications-btn">
+          {% if is_member %}Manage Membership{% else %}Join Membership{% endif %}
+        </a>
+      </div>
+    </section>
+
   </div>
 </section>
 

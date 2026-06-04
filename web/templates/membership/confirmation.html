@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="page-container">
+    <div class="membership-confirmation-container">
+
+        <h1>Payment Confirmed</h1>
+
+        <div class="membership-pay-box">
+            <p>Your membership payment has been successfully processed.</p>
+
+            <dl class="employer-dashboard-details">
+                <div class="employer-dashboard-detail-row">
+                    <dt>Next Payment Due</dt>
+                    <dd>{{ membership.next_due_date }}</dd>
+                </div>
+                <div class="employer-dashboard-detail-row">
+                    <dt>Grace Period Ends</dt>
+                    <dd>{{ membership.grace_deadline }}</dd>
+                </div>
+                <div class="employer-dashboard-detail-row">
+                    <dt>Amount Paid</dt>
+                    <dd>${{ "%.2f"|format(membership.price) }}</dd>
+                </div>
+            </dl>
+        </div>
+
+        <div class="membership-confirmation-back">
+            {% if session.get('user_type') == 'candidate' %}
+                <a href="{{ url_for('candidate.profile_page') }}" class="nav-cta">Back to Profile</a>
+            {% elif session.get('user_type') == 'employer' %}
+                <a href="{{ url_for('employer.dashboard') }}" class="nav-cta">Back to Dashboard</a>
+            {% endif %}
+        </div>
+
+    </div>
+</div>
+{% endblock %}

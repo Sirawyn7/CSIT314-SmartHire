@@ -6,9 +6,11 @@ Flask Server Class
 from flask import Flask, jsonify
 import webbrowser
 import os
+from apscheduler.schedulers.background import BackgroundScheduler
 from database import DatabaseManager
 from routes import route_classes
-from config import SECRET_KEY
+from config import SECRET_KEY, MEMBERSHIP_CHECK_HOUR
+from core.membership_core import MembershipManager
 
 class Server:
 
@@ -32,6 +34,7 @@ class Server:
         )
         self.db = DatabaseManager(db_path)
         self._register_routes()
+        self._start_scheduler()
         self._initialised = True
         self.app.secret_key = SECRET_KEY
 
@@ -43,6 +46,17 @@ class Server:
         for route_class in route_classes:
             instance = route_class(self.db)
             self.app.register_blueprint(instance.blueprint)
+
+    def _start_scheduler(self):
+        """Initialises and starts the background scheduler for overnight membership checks."""
+        scheduler = BackgroundScheduler()
+        scheduler.add_job(func=self._run_membership_check, trigger="cron", hour=MEMBERSHIP_CHECK_HOUR)
+        scheduler.start()
+
+    def _run_membership_check(self):
+        """Runs the overnight membership lapse check. Called by the scheduler at the configured hour."""
+        manager = MembershipManager(self.db)
+        manager.lapse_overdue_memberships()
 
     #Debug function
     def ping(self):

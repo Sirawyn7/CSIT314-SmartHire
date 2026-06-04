@@ -11,6 +11,7 @@ from routes.employers_routes import EmployerRoutes
 from routes.admin_routes import AdminRoutes
 from routes.jobs_routes import JobRoutes
 from routes.recommendations_routes import RecommendationRoutes
+from routes.membership_routes import MembershipRoutes
 
 route_classes = [
     AuthRoutes,
@@ -19,5 +20,6 @@ route_classes = [
     EmployerRoutes,
     AdminRoutes,
     JobRoutes,
-    RecommendationRoutes
+    RecommendationRoutes,
+    MembershipRoutes
     ]
