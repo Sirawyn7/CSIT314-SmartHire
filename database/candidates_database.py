@@ -108,6 +108,17 @@ class CandidatesDatabase:
         self.conn.commit()
 
     def get_all(self):
-        """Returns all candidate rows as a list of dicts."""
-        rows = self.conn.execute("SELECT * FROM candidates").fetchall()
+        """Returns all candidate rows as a list of dicts, including account email."""
+        rows = self.conn.execute(
+            """
+            SELECT
+                candidates.*,
+                users.email AS email
+            FROM candidates
+            JOIN users
+                ON users.id = candidates.user_id
+            WHERE users.user_type = 'candidate'
+            ORDER BY candidates.id ASC
+            """
+        ).fetchall()
         return [dict(row) for row in rows]
