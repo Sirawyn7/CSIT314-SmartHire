@@ -19,8 +19,17 @@
   </header>
 
   <div class="candidate-profile-panel candidate-profile-panel-wide">
-    <div class="candidate-profile-copy">
+    <div class="job-preview-head">
       <h3 class="candidate-application-note-title">Job Description Preview</h3>
+
+      <div class="job-preview-actions">
+        <a href="{{ url_for('jobs.job_details_page', job_id=job.id) }}" class="nav-cta">
+          View Job
+        </a>
+      </div>
+    </div>
+
+    <div class="candidate-profile-copy">
       <div class="application-preview-text">
         {{ job.description if job.description else 'No description provided.' }}
       </div>
