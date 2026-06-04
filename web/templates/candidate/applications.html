@@ -16,7 +16,7 @@
     </div>
 
     <div class="candidate-profile-header-actions">
-      <a href="{{ url_for('candidate.profile_page') }}" class="candidate-profile-applications-btn">
+      <a href="{{ url_for('candidate.profile_page') }}" class="nav-cta">
         Back to Profile
       </a>
     </div>
@@ -36,9 +36,13 @@
               <p class="candidate-application-company">{{ application.company_name }}</p>
             </div>
 
-            <span class="job-badge {% if application.status == 'withdrawn' or not application.is_active %}badge-inactive{% else %}badge-active{% endif %}">
+          <span class="job-badge {% if application.status == 'withdrawn' or not application.is_active %}badge-inactive{% else %}badge-active{% endif %}">
+            {% if not application.is_active %}
+              Closed
+            {% else %}
               {{ application.status|title }}
-            </span>
+            {% endif %}
+          </span>
           </div>
 
           <div class="candidate-profile-preferences">
