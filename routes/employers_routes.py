@@ -16,6 +16,8 @@ class EmployerRoutes:
         self.blueprint.add_url_rule("/employer/jobs", view_func=self.manage_jobs, methods=["GET"])
         self.blueprint.add_url_rule("/employer/jobs/<int:job_id>/deactivate", view_func=self.deactivate_job, methods=["POST"])
         self.blueprint.add_url_rule("/employer/jobs/<int:job_id>/reactivate", view_func=self.reactivate_job, methods=["POST"])
+        self.blueprint.add_url_rule("/employer/jobs/<int:job_id>/applications",view_func=self.job_applications_page,methods=["GET"])
+        self.blueprint.add_url_rule("/employer/applications/<int:application_id>/status",view_func=self.update_application_status,methods=["POST"])
 
     def dashboard(self):
         """Renders the employer dashboard page."""
@@ -100,3 +102,51 @@ class EmployerRoutes:
         if employer:
             self.db.jobs.set_active_status(job_id, employer["id"], 1)
         return redirect(url_for("employer.manage_jobs", tab="inactive"))
+    
+    def job_applications_page(self, job_id):
+        user_id = session.get("user_id")
+        if not user_id:
+            return redirect(url_for("auth.login_page"))
+
+        employer = self.db.employers.get_by_user_id(user_id)
+        if not employer:
+            return redirect(url_for("employer.dashboard"))
+
+        job = self.db.jobs.get_by_id(job_id)
+        if not job or job["employer_id"] != employer["id"]:
+            return render_template("error.html", message="Job not found."), 404
+
+        applications = self.db.applications.get_all_by_job_id_and_employer_id(job_id, employer["id"])
+
+        return render_template(
+            "employer/job_applications.html",
+            employer=employer,
+            job=job,
+            applications=applications,
+            updated=bool(request.args.get("updated")),
+        )
+
+    def update_application_status(self, application_id):
+        user_id = session.get("user_id")
+        if not user_id:
+            return redirect(url_for("auth.login_page"))
+
+        employer = self.db.employers.get_by_user_id(user_id)
+        if not employer:
+            return redirect(url_for("employer.dashboard"))
+
+        status = (request.form.get("status") or "").strip().lower()
+        allowed_statuses = {"pending", "reviewed", "contacted", "rejected", "accepted"}
+        if status not in allowed_statuses:
+            return redirect(url_for("employer.dashboard"))
+
+        job_id = self.db.applications.update_status_by_id_and_employer_id(
+            application_id,
+            employer["id"],
+            status,
+        )
+
+        if not job_id:
+            return render_template("error.html", message="Application not found."), 404
+
+        return redirect(url_for("employer.job_applications_page", job_id=job_id, updated=1))

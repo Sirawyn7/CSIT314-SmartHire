@@ -131,6 +131,16 @@ class JobRoutes:
         candidate = self.db.candidates.get_by_user_id(user_id)
         if not candidate:
             return redirect(url_for("jobs.job_details_page", job_id=job_id, error="Candidate profile not found."))
+        
+        existing_application = self.db.applications.get_by_candidate_and_job(candidate["id"], job_id)
+        if existing_application and existing_application["status"] == "accepted":
+            return redirect(
+                url_for(
+                    "jobs.job_details_page",
+                    job_id=job_id,
+                    error="You have already been accepted for this job."
+                )
+            )
 
         full_name = (request.form.get("full_name") or "").strip()
         if not full_name:

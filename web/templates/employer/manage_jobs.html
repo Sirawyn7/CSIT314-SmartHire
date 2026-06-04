@@ -66,6 +66,12 @@
               <form class="deactivate-form" data-action="{{ url_for('employer.deactivate_job', job_id=job.id) }}">
                 <button type="button" class="btn btn-danger" onclick="openModal(this)">Deactivate</button>
               </form>
+              <a
+                href="{{ url_for('employer.job_applications_page', job_id=job.id) }}"
+                class="btn-view"
+              >
+                View Applications
+              </a>
             </div>
           </article>
         {% endfor %}
@@ -100,7 +106,7 @@
             <p class="job-mgmt-posted">Posted: {{ job.created_at }}</p>
             <div class="job-mgmt-actions">
               <form method="POST" action="{{ url_for('employer.reactivate_job', job_id=job.id) }}">
-                <button type="submit" class="btn btn-primary">Reactivate</button>
+                <button type="submit" class="candidate-application-btn">Reactivate</button>
               </form>
             </div>
           </article>

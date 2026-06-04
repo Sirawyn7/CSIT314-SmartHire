@@ -19,7 +19,7 @@ class ApplicationsDatabase:
                 candidate_id INTEGER NOT NULL,
                 cover_letter TEXT,
                 status TEXT NOT NULL DEFAULT 'pending'
-                    CHECK(status IN ('pending', 'reviewed', 'rejected', 'accepted', 'withdrawn')),
+                    CHECK(status IN ('pending', 'reviewed', 'contacted', 'rejected', 'accepted', 'withdrawn')),
                 applied_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
                 FOREIGN KEY (job_id) REFERENCES jobs(id),
                 FOREIGN KEY (candidate_id) REFERENCES candidates(id),
@@ -113,3 +113,74 @@ class ApplicationsDatabase:
             (status, application_id, candidate_id),
         )
         self.conn.commit()
+
+    def get_all_by_job_id_and_employer_id(self, job_id, employer_id):
+        rows = self.conn.execute(
+            """
+            SELECT
+                applications.*,
+                candidates.full_name,
+                candidates.phone,
+                candidates.education,
+                candidates.field_of_study,
+                candidates.years_experience,
+                candidates.skills,
+                candidates.work_experience,
+                candidates.preferred_work_mode,
+                candidates.preferred_location,
+                users.email,
+                jobs.title AS job_title,
+                jobs.required_education,
+                jobs.required_skills,
+                jobs.years_experience_required,
+                jobs.work_mode AS job_work_mode,
+                jobs.location AS job_location,
+                jobs.description AS job_description
+            FROM applications
+            JOIN jobs ON applications.job_id = jobs.id
+            JOIN candidates ON applications.candidate_id = candidates.id
+            JOIN users ON candidates.user_id = users.id
+            WHERE applications.job_id = ?
+            AND jobs.employer_id = ?
+            ORDER BY datetime(applications.applied_at) DESC, applications.id DESC
+            """,
+            (job_id, employer_id),
+        ).fetchall()
+        return [dict(row) for row in rows]
+
+    def update_status_by_id_and_employer_id(self, application_id, employer_id, status):
+        row = self.conn.execute(
+            """
+            SELECT applications.job_id
+            FROM applications
+            JOIN jobs ON applications.job_id = jobs.id
+            WHERE applications.id = ?
+            AND jobs.employer_id = ?
+            """,
+            (application_id, employer_id),
+        ).fetchone()
+
+        if not row:
+            return None
+
+        self.conn.execute(
+            """
+            UPDATE applications
+            SET status = ?
+            WHERE id = ?
+            """,
+            (status, application_id),
+        )
+        self.conn.commit()
+        return row["job_id"]
+    
+    def get_accepted_job_ids_by_candidate_id(self, candidate_id):
+        rows = self.conn.execute(
+            """
+            SELECT job_id
+            FROM applications
+            WHERE candidate_id = ? AND status = 'accepted'
+            """,
+            (candidate_id,),
+        ).fetchall()
+        return [row["job_id"] for row in rows]
