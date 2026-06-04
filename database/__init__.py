@@ -11,7 +11,8 @@ from database.candidates_database import CandidatesDatabase
 from database.employers_database import EmployersDatabase
 from database.jobs_database import JobsDatabase
 from database.applications_database import ApplicationsDatabase
-from database.members_database import MembersDatabase
+from database.memberships_database import MembershipsDatabase
+from database.payments_database import PaymentsDatabase
 from database.seeders.users_seeder import UsersSeeder
 from database.seeders.jobs_seeder import JobSeeder
  
@@ -26,7 +27,8 @@ class DatabaseManager:
         self.users        = UsersDatabase(conn, self)
         self.jobs         = JobsDatabase(conn)
         self.applications = ApplicationsDatabase(conn)
-        self.memberships  = MembersDatabase(conn)
+        self.memberships  = MembershipsDatabase(conn)
+        self.payments     = PaymentsDatabase(conn)
 
         self.users_seeder = UsersSeeder(self)
         self.job_seeder   = JobSeeder(self)

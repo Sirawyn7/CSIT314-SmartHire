@@ -1,4 +1,5 @@
 from flask import Blueprint, render_template, session, request, redirect, url_for
+from core.membership_core import MembershipManager
 
 
 class CandidateRoutes:
@@ -28,10 +29,14 @@ class CandidateRoutes:
         user = self.db.users.get_by_user_id(user_id)
         is_member = bool(user["is_member"]) if user else False
 
+        manager = MembershipManager(self.db)
+        membership = manager.get_membership_context(user_id)
+
         return render_template(
             "candidate/profile.html",
             candidate=candidate,
             is_member=is_member,
+            membership=membership,
             updated=bool(request.args.get("updated"))
         )
 
@@ -61,7 +66,7 @@ class CandidateRoutes:
         )
 
         return redirect(url_for("candidate.profile_page", updated=1))
-    
+
     def applications_page(self):
         """Renders the logged-in candidate's applied jobs page."""
         user_id = session.get("user_id")
@@ -79,7 +84,7 @@ class CandidateRoutes:
             candidate=candidate,
             applications=applications,
         )
-    
+
     def withdraw_application_post(self, application_id):
         """Marks an application as withdrawn for the logged-in candidate."""
         user_id = session.get("user_id")

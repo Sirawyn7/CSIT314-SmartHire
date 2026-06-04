@@ -1,5 +1,6 @@
 
-
+import random
+from datetime import datetime, timedelta
 from core.users_core import User, Candidate, Employer
 from database.seeders.seed_data.users_seed_data import SEED_USERS
 
@@ -19,6 +20,12 @@ class UsersSeeder:
         for data in SEED_USERS:
             user = self._build_user(data)
             self.db.users.insert(user)
+            user_row = self.db.users.get_by_email(user.email)
+            user_id = user_row["id"]
+
+            if data.get("is_member", 0):
+                started_at = self._random_started_at()
+                self.db.memberships.insert(user_id, started_at)
 
     def _build_user(self, data):
         """Constructs the correct User subclass instance from raw seed data."""
@@ -58,3 +65,9 @@ class UsersSeeder:
 
         else:
             return User(base)
+    
+    def _random_started_at(self):
+        """Returns a random datetime string within the past 30 days."""
+        days_ago = random.randint(0, 29)
+        started_at = datetime.now() - timedelta(days=days_ago)
+        return started_at.strftime("%Y-%m-%d %H:%M:%S")

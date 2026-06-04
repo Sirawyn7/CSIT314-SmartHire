@@ -80,6 +80,49 @@
   </section>
 
   <section class="employer-dashboard-panel employer-dashboard-panel-wide">
+    <div class="employer-dashboard-panel-head">
+      <h2>Membership</h2>
+    </div>
+
+    <div class="employer-dashboard-membership">
+      {% if is_member %}
+        {% if membership %}
+          <dl class="employer-dashboard-details">
+            <div class="employer-dashboard-detail-row">
+              <dt>Next Payment Due</dt>
+              <dd>{{ membership.next_due_date }}</dd>
+            </div>
+
+            <div class="employer-dashboard-detail-row">
+              <dt>Grace Period Ends</dt>
+              <dd>{{ membership.grace_deadline }}</dd>
+            </div>
+
+            <div class="employer-dashboard-detail-row">
+              <dt>Monthly Rate</dt>
+              <dd>${{ "%.2f"|format(membership.price) }}</dd>
+            </div>
+          </dl>
+
+          {% if membership.is_payment_overdue %}
+            <p class="employer-dashboard-membership-warning">Your payment is overdue. Please pay to retain membership access.</p>
+          {% elif membership.is_current_period_paid %}
+            <p class="employer-dashboard-membership-ok">Your membership is up to date.</p>
+          {% else %}
+            <p class="employer-dashboard-membership-due">A payment is due for the current period.</p>
+          {% endif %}
+        {% endif %}
+      {% else %}
+        <p class="employer-dashboard-membership-inactive">You do not currently have an active membership. Upgrade to receive unlimited recommendations.</p>
+      {% endif %}
+
+      <a href="{{ url_for('membership.pay_page') }}" class="nav-cta">
+        {% if is_member %}Manage Membership{% else %}Join Membership{% endif %}
+      </a>
+    </div>
+  </section>
+
+  <section class="employer-dashboard-panel employer-dashboard-panel-wide">
     <div class="employer-dashboard-panel-head" style="display: flex; justify-content: space-between; align-items: center; padding-right: 1.5rem; margin-bottom: 1rem;">
       <h2>Recent Job Listings</h2>
       <a href="{{ url_for('employer.manage_jobs') }}" class="nav-cta">Manage Jobs</a>
