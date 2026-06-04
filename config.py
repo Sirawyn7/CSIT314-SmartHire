@@ -15,3 +15,14 @@ JOB_KEYWORD_FIELDS = ("title", "description", "location", "required_skills")
 #Fuzzy search
 FUZZY_TYPO_TOLERANCE = 3
 FUZZY_MIN_WORD_LENGTH = 3
+
+#Matcher scoring weights - must sum to 1.0
+SKILL_WEIGHT       = 0.40
+EXPERIENCE_WEIGHT  = 0.20
+EDUCATION_WEIGHT   = 0.15
+WORK_MODE_WEIGHT   = 0.15
+LOCATION_WEIGHT    = 0.10
+
+
+#Max number of recommendations returned to non-member users
+MAX_RECOMMENDATIONS = 10

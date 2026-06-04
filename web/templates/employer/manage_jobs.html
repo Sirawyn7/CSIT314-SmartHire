@@ -26,7 +26,7 @@
 <div class="employer-dashboard-layout">
 
   <!-- Tab Navigation -->
-  <div class="job-mgmt-tabs">
+  <div class="job-mgmt-tabs" style="grid-column: 1 / -1;">
     <a href="{{ url_for('employer.manage_jobs', tab='active') }}"
        class="job-mgmt-tab {% if tab == 'active' %}job-mgmt-tab--active{% endif %}">
       Active Jobs
@@ -62,16 +62,16 @@
             <p class="employer-dashboard-job-description">{{ job.description }}</p>
             <p class="job-mgmt-posted">Posted: {{ job.created_at }}</p>
             <div class="job-mgmt-actions">
-              <a href="{{ url_for('jobs.job_details_page', job_id=job.id) }}" class="btn-view">View</a>
-              <form class="deactivate-form" data-action="{{ url_for('employer.deactivate_job', job_id=job.id) }}">
-                <button type="button" class="btn btn-danger" onclick="openModal(this)">Deactivate</button>
-              </form>
-              <a
-                href="{{ url_for('employer.job_applications_page', job_id=job.id) }}"
-                class="btn-view"
-              >
-                View Applications
-              </a>
+              <div class="job-mgmt-actions-row">
+                <a href="{{ url_for('jobs.job_details_page', job_id=job.id) }}" class="btn-view">View</a>
+                <form class="deactivate-form" data-action="{{ url_for('employer.deactivate_job', job_id=job.id) }}">
+                  <button type="button" class="btn btn-danger" onclick="openModal(this)">Deactivate</button>
+                </form>
+                <a href="{{ url_for('employer.job_applications_page', job_id=job.id) }}" class="btn-view">View Applications</a>
+              </div>
+              <div class="job-mgmt-actions-row">
+                <a href="{{ url_for('recommendations.employer_recommendations', job_id=job.id) }}" class="btn-view">Recommended Candidates</a>
+              </div>
             </div>
           </article>
         {% endfor %}
@@ -105,9 +105,11 @@
             <p class="employer-dashboard-job-description">{{ job.description }}</p>
             <p class="job-mgmt-posted">Posted: {{ job.created_at }}</p>
             <div class="job-mgmt-actions">
-              <form method="POST" action="{{ url_for('employer.reactivate_job', job_id=job.id) }}">
-                <button type="submit" class="candidate-application-btn">Reactivate</button>
-              </form>
+              <div class="job-mgmt-actions-row">
+                <form method="POST" action="{{ url_for('employer.reactivate_job', job_id=job.id) }}">
+                  <button type="submit" class="candidate-application-btn">Reactivate</button>
+                </form>
+              </div>
             </div>
           </article>
         {% endfor %}
@@ -121,23 +123,6 @@
   {% endif %}
 
 </div>
-
-<style>
-.btn-view {
-  display: inline-block;
-  padding: 0.35rem 0.9rem;
-  font-size: 0.82rem;
-  font-weight: 600;
-  color: #fff;
-  background: var(--color-blue, #006494);
-  border-radius: var(--radius-md, 0.5rem);
-  text-decoration: none;
-  transition: background 0.18s;
-}
-.btn-view:hover {
-  background: var(--color-blue-hover, #0b5177);
-}
-</style>
 
 <script>
   var pendingForm = null;

@@ -165,3 +165,18 @@ class JobsDatabase:
             (status, job_id, employer_id)
         )
         self.conn.commit()
+
+    def get_all_active(self):
+        """Returns all active job rows as a list of dicts."""
+        rows = self.conn.execute(
+            "SELECT * FROM jobs WHERE is_active = 1"
+        ).fetchall()
+        return [dict(row) for row in rows]
+
+    def get_active_by_employer(self, employer_id):
+        """Returns all active job rows for a given employer as a list of dicts."""
+        rows = self.conn.execute(
+            "SELECT * FROM jobs WHERE employer_id = ? AND is_active = 1",
+            (employer_id,)
+        ).fetchall()
+        return [dict(row) for row in rows]

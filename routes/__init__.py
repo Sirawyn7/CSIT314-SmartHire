@@ -10,6 +10,7 @@ from routes.candidate_routes import CandidateRoutes
 from routes.employers_routes import EmployerRoutes
 from routes.admin_routes import AdminRoutes
 from routes.jobs_routes import JobRoutes
+from routes.recommendations_routes import RecommendationRoutes
 
 route_classes = [
     AuthRoutes,
@@ -17,5 +18,6 @@ route_classes = [
     CandidateRoutes,
     EmployerRoutes,
     AdminRoutes,
-    JobRoutes
+    JobRoutes,
+    RecommendationRoutes
     ]

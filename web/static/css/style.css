@@ -855,8 +855,9 @@ body.modal-open {
 
 .employer-dashboard-jobs {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(2, 1fr);
   gap: 1rem;
+  align-items: start;
 }
 
 .employer-dashboard-job-card {
@@ -1639,9 +1640,16 @@ body.modal-open {
 
 .job-mgmt-actions {
   display: flex;
+  flex-direction: column;
   gap: 0.5rem;
-  margin-top: 0.75rem;
-  flex-wrap: wrap;
+  align-items: flex-start;
+}
+
+.job-mgmt-actions-row {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  align-items: center;
 }
 
 .job-mgmt-posted {
