@@ -21,18 +21,18 @@ e.g. imports header, navigation, footer without explicit declaration in each fil
       <a class="nav-brand" href="/home">Smart Hire</a>
       <ul class="nav-links">
         <li><a href="/home" class="nav-link">Home</a></li>
-
         <li><a href="/jobs" class="nav-link">Current job listings</a></li>
+
         {% if session.get('user_id') %}
-          <li>
-            {% if session.get('user_type') == 'candidate' %}
-              <a href="{{ url_for('candidate.profile_page') }}" class="nav-link">Profile</a>
-            {% elif session.get('user_type') == 'employer' %}
-              <a href="{{ url_for('employer.dashboard') }}" class="nav-link">Dashboard</a>
-            {% endif %}
-          </li>
+          {% if session.get('user_type') == 'candidate' %}
+            <li><a href="{{ url_for('candidate.profile_page') }}" class="nav-link">My Profile</a></li>
+            <li><a href="{{ url_for('recommendations.candidate_recommendations') }}" class="nav-link">Recommended Jobs</a></li>
+          {% elif session.get('user_type') == 'employer' %}
+            <li><a href="{{ url_for('employer.dashboard') }}" class="nav-link">Dashboard</a></li>
+          {% endif %}
         {% endif %}
       </ul>
+
       {% if session.get('user_id') %}
         <a href="{{ url_for('auth.logout') }}" class="nav-cta">Logout</a>
       {% else %}

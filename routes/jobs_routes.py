@@ -10,13 +10,13 @@ class JobRoutes:
     def __init__(self, db):
         self.db = db
         self.search_engine = SearchEngine()
-        self.blueprint = Blueprint("jobs", __name__, url_prefix="/jobs")
+        self.blueprint = Blueprint("jobs", __name__)
         self._register_routes()
 
     def _register_routes(self):
-        self.blueprint.add_url_rule("/", view_func=self.jobs_page, methods=["GET"])
-        self.blueprint.add_url_rule("/<int:job_id>", view_func=self.job_details_page, methods=["GET"])
-        self.blueprint.add_url_rule("/<int:job_id>/apply", view_func=self.apply_to_job, methods=["POST"])
+        self.blueprint.add_url_rule("/jobs/", view_func=self.jobs_page, methods=["GET"])
+        self.blueprint.add_url_rule("/jobs/<int:job_id>", view_func=self.job_details_page, methods=["GET"])
+        self.blueprint.add_url_rule("/jobs/<int:job_id>/apply", view_func=self.apply_to_job, methods=["POST"])
 
     def jobs_page(self):
         """Renders the paginated job listings page with keyword, fuzzy, and filter search."""

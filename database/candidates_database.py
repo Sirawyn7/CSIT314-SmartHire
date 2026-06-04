@@ -106,3 +106,8 @@ class CandidatesDatabase:
             )
         )
         self.conn.commit()
+
+    def get_all(self):
+        """Returns all candidate rows as a list of dicts."""
+        rows = self.conn.execute("SELECT * FROM candidates").fetchall()
+        return [dict(row) for row in rows]

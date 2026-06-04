@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="candidate-profile-page">
+  <header class="candidate-profile-header">
+    <div>
+      <p class="candidate-profile-eyebrow">Recommended Candidates</p>
+      <h1 class="candidate-profile-title">{{ job.title }}</h1>
+      <p class="candidate-profile-intro">
+        Candidates ranked by profile match against this job's requirements.
+        {% if is_member %}
+          Showing all matched candidates.
+        {% else %}
+          Showing top {{ limit }} matches. Upgrade to membership to see all results.
+        {% endif %}
+      </p>
+    </div>
+    <div class="candidate-profile-header-actions">
+      <a href="{{ url_for('employer.manage_jobs', tab='active') }}" class="nav-cta">Back to Manage Jobs</a>
+    </div>
+  </header>
+
+  {% if results %}
+    <section class="candidate-profile-layout employer-applications-grid">
+      {% for candidate, score in results %}
+        <article class="candidate-profile-panel candidate-application-card employer-application-card">
+
+          <div class="candidate-application-card-head">
+            <div>
+              <h2 class="candidate-application-title">{{ candidate.full_name }}</h2>
+              <p class="candidate-application-company">
+                {{ candidate.preferred_location or 'Location not provided' }}
+                {% if candidate.preferred_work_mode %} &middot; {{ candidate.preferred_work_mode }}{% endif %}
+              </p>
+            </div>
+            <span class="job-badge badge-active">{{ score }}% Match</span>
+          </div>
+
+          <div class="candidate-profile-copy">
+            <h3 class="candidate-application-note-title">Job vs Candidate Comparison</h3>
+
+            <div class="candidate-profile-preferences">
+              <div class="candidate-profile-summary-card">
+                <span class="candidate-profile-preference-label">Education Required</span>
+                <span class="candidate-profile-preference-value">{{ job.required_education or 'Not specified' }}</span>
+              </div>
+              <div class="candidate-profile-summary-card">
+                <span class="candidate-profile-preference-label">Candidate Education</span>
+                <span class="candidate-profile-preference-value">{{ candidate.education or 'Not provided' }}</span>
+              </div>
+
+              <div class="candidate-profile-summary-card">
+                <span class="candidate-profile-preference-label">Experience Required</span>
+                <span class="candidate-profile-preference-value">{{ job.years_experience_required if job.years_experience_required is not none else 'Not specified' }}</span>
+              </div>
+              <div class="candidate-profile-summary-card">
+                <span class="candidate-profile-preference-label">Candidate Experience</span>
+                <span class="candidate-profile-preference-value">{{ candidate.years_experience if candidate.years_experience is not none else 'Not provided' }}</span>
+              </div>
+
+              <div class="candidate-profile-summary-card">
+                <span class="candidate-profile-preference-label">Required Skills</span>
+                <span class="candidate-profile-preference-value">{{ job.required_skills or 'Not specified' }}</span>
+              </div>
+              <div class="candidate-profile-summary-card">
+                <span class="candidate-profile-preference-label">Candidate Skills</span>
+                <span class="candidate-profile-preference-value">{{ candidate.skills or 'Not provided' }}</span>
+              </div>
+
+              <div class="candidate-profile-summary-card">
+                <span class="candidate-profile-preference-label">Job Work Mode</span>
+                <span class="candidate-profile-preference-value">{{ job.work_mode or 'Not specified' }}</span>
+              </div>
+              <div class="candidate-profile-summary-card">
+                <span class="candidate-profile-preference-label">Candidate Preference</span>
+                <span class="candidate-profile-preference-value">{{ candidate.preferred_work_mode or 'Not provided' }}</span>
+              </div>
+
+              <div class="candidate-profile-summary-card">
+                <span class="candidate-profile-preference-label">Job Location</span>
+                <span class="candidate-profile-preference-value">{{ job.location or 'Not specified' }}</span>
+              </div>
+              <div class="candidate-profile-summary-card">
+                <span class="candidate-profile-preference-label">Candidate Preferred Location</span>
+                <span class="candidate-profile-preference-value">{{ candidate.preferred_location or 'Not provided' }}</span>
+              </div>
+            </div>
+          </div>
+
+          {% if candidate.work_experience %}
+          <div class="candidate-profile-copy">
+            <h3 class="candidate-application-note-title">Candidate Work Experience</h3>
+            <div class="application-preview-text">
+              {{ candidate.work_experience }}
+            </div>
+          </div>
+          {% endif %}
+
+        </article>
+      {% endfor %}
+    </section>
+
+  {% else %}
+    <section class="candidate-profile-panel candidate-profile-panel-wide">
+      <div class="candidate-profile-panel-head">
+        <h2>No Matches Found</h2>
+      </div>
+      <div class="candidate-profile-copy">
+        <p>No candidates matched this job yet.</p>
+      </div>
+    </section>
+  {% endif %}
+
+</section>
+{% endblock %}
