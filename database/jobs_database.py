@@ -180,3 +180,31 @@ class JobsDatabase:
             (employer_id,)
         ).fetchall()
         return [dict(row) for row in rows]
+    def update_by_id_and_employer_id(self, job_id, employer_id, data):
+        """Updates a job only if it belongs to the given employer."""
+        self.conn.execute(
+            """
+            UPDATE jobs
+            SET
+                title = ?,
+                description = ?,
+                required_education = ?,
+                required_skills = ?,
+                years_experience_required = ?,
+                work_mode = ?,
+                location = ?
+            WHERE id = ? AND employer_id = ?
+            """,
+            (
+                data.get("title"),
+                data.get("description"),
+                data.get("required_education"),
+                data.get("required_skills"),
+                data.get("years_experience_required"),
+                data.get("work_mode"),
+                data.get("location"),
+                job_id,
+                employer_id,
+            )
+        )
+        self.conn.commit()

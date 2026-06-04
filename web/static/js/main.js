@@ -90,6 +90,7 @@ document.addEventListener("DOMContentLoaded", () => {
     initEmployerDashboardModal();
     initJobApplicationModal();
     initRemoveApplicationModal();
+    initCreateJobModal();
 });
 
 function initCandidateProfileModal() {
@@ -237,4 +238,40 @@ function openRemoveApplicationModal(button) {
     modal.hidden = false;
     modal.setAttribute("aria-hidden", "false");
     document.body.classList.add("modal-open");
+}
+
+function openEditJobModal() {
+  var modal = document.getElementById('edit-job-modal');
+  if (!modal) return;
+
+  modal.hidden = false;
+  modal.setAttribute('aria-hidden', 'false');
+  document.body.classList.add('modal-open');
+}
+
+function closeEditJobModal() {
+  var modal = document.getElementById('edit-job-modal');
+  if (!modal) return;
+
+  modal.hidden = true;
+  modal.setAttribute('aria-hidden', 'true');
+  document.body.classList.remove('modal-open');
+}
+
+function openCreateJobModal() {
+  var modal = document.getElementById("create-job-modal");
+  if (!modal) return;
+
+  modal.hidden = false;
+  modal.setAttribute("aria-hidden", "false");
+  document.body.classList.add("modal-open");
+}
+
+function closeCreateJobModal() {
+  var modal = document.getElementById("create-job-modal");
+  if (!modal) return;
+
+  modal.hidden = true;
+  modal.setAttribute("aria-hidden", "true");
+  document.body.classList.remove("modal-open");
 }

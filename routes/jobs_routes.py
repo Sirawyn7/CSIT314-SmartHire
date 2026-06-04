@@ -90,6 +90,12 @@ class JobRoutes:
 
         user_id = session.get("user_id")
         user_type = session.get("user_type")
+        is_job_owner = False
+
+        if user_id and user_type == "employer":
+            employer = self.db.employers.get_by_user_id(user_id)
+            if employer and employer["id"] == job["employer_id"]:
+                is_job_owner = True
 
         candidate = None
         application = None
@@ -109,6 +115,9 @@ class JobRoutes:
             applied=bool(request.args.get("applied")),
             updated=bool(request.args.get("updated")),
             apply_error=request.args.get("error", "").strip(),
+            is_job_owner=is_job_owner,
+            work_modes=WORK_MODES,
+            education_levels=EDUCATION_LEVELS,
         )
 
     def apply_to_job(self, job_id):

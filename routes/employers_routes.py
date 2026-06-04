@@ -1,5 +1,6 @@
-
 from flask import Blueprint, render_template, session, redirect, url_for, request
+from config import WORK_MODES, EDUCATION_LEVELS
+from core.jobs_core import Job
 
 
 class EmployerRoutes:
@@ -18,6 +19,8 @@ class EmployerRoutes:
         self.blueprint.add_url_rule("/employer/jobs/<int:job_id>/reactivate", view_func=self.reactivate_job, methods=["POST"])
         self.blueprint.add_url_rule("/employer/jobs/<int:job_id>/applications",view_func=self.job_applications_page,methods=["GET"])
         self.blueprint.add_url_rule("/employer/applications/<int:application_id>/status",view_func=self.update_application_status,methods=["POST"])
+        self.blueprint.add_url_rule("/employer/jobs/create", view_func=self.create_job_post, methods=["POST"])
+        self.blueprint.add_url_rule("/employer/jobs/<int:job_id>/edit", view_func=self.edit_job_post, methods=["POST"])
 
     def dashboard(self):
         """Renders the employer dashboard page."""
@@ -82,7 +85,10 @@ class EmployerRoutes:
             employer=employer,
             active_jobs=active_jobs,
             inactive_jobs=inactive_jobs,
-            tab=tab
+            tab=tab,
+            work_modes=WORK_MODES,
+            education_levels=EDUCATION_LEVELS,
+            created=bool(request.args.get("created"))
         )
     
     def deactivate_job(self, job_id):
@@ -150,3 +156,81 @@ class EmployerRoutes:
             return render_template("error.html", message="Application not found."), 404
 
         return redirect(url_for("employer.job_applications_page", job_id=job_id, updated=1))
+    
+    def create_job_post(self):
+        user_id = session.get("user_id")
+        if not user_id:
+            return redirect(url_for("auth.login_page"))
+
+        employer = self.db.employers.get_by_user_id(user_id)
+        if not employer:
+            return redirect(url_for("employer.dashboard"))
+
+        title = (request.form.get("title") or "").strip()
+        description = (request.form.get("description") or "").strip()
+
+        if not title or not description:
+            return redirect(url_for("employer.manage_jobs", tab="active"))
+
+        raw_years = (request.form.get("years_experience_required") or "").strip()
+        try:
+            years_experience_required = int(raw_years) if raw_years else None
+        except ValueError:
+            years_experience_required = None
+
+        job = Job({
+            "employer_id": employer["id"],
+            "title": title,
+            "description": description,
+            "required_education": (request.form.get("required_education") or "").strip() or None,
+            "required_skills": (request.form.get("required_skills") or "").strip() or None,
+            "years_experience_required": years_experience_required,
+            "work_mode": (request.form.get("work_mode") or "").strip() or None,
+            "location": (request.form.get("location") or "").strip() or None,
+            "is_active": 1,
+            "source": "employer_created",
+        })
+
+        self.db.jobs.insert(job)
+        return redirect(url_for("employer.manage_jobs", tab="active", created=1))
+    
+    def edit_job_post(self, job_id):
+        user_id = session.get("user_id")
+        if not user_id:
+            return redirect(url_for("auth.login_page"))
+
+        employer = self.db.employers.get_by_user_id(user_id)
+        if not employer:
+            return redirect(url_for("employer.dashboard"))
+
+        job = self.db.jobs.get_by_id(job_id)
+        if not job or job["employer_id"] != employer["id"]:
+            return render_template("error.html", message="Job not found."), 404
+
+        title = (request.form.get("title") or "").strip()
+        description = (request.form.get("description") or "").strip()
+
+        if not title or not description:
+            return redirect(url_for("jobs.job_details_page", job_id=job_id))
+
+        raw_years = (request.form.get("years_experience_required") or "").strip()
+        try:
+            years_experience_required = int(raw_years) if raw_years else None
+        except ValueError:
+            years_experience_required = None
+
+        self.db.jobs.update_by_id_and_employer_id(
+            job_id,
+            employer["id"],
+            {
+                "title": title,
+                "description": description,
+                "required_education": (request.form.get("required_education") or "").strip() or None,
+                "required_skills": (request.form.get("required_skills") or "").strip() or None,
+                "years_experience_required": years_experience_required,
+                "work_mode": (request.form.get("work_mode") or "").strip() or None,
+                "location": (request.form.get("location") or "").strip() or None,
+            }
+        )
+
+        return redirect(url_for("jobs.job_details_page", job_id=job_id))
