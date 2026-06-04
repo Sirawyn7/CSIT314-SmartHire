@@ -18,6 +18,15 @@
     </div>
   </header>
 
+  <div class="candidate-profile-panel candidate-profile-panel-wide">
+    <div class="candidate-profile-copy">
+      <h3 class="candidate-application-note-title">Job Description Preview</h3>
+      <div class="application-preview-text">
+        {{ job.description if job.description else 'No description provided.' }}
+      </div>
+    </div>
+  </div>
+
   {% if updated %}
     <section class="candidate-profile-panel candidate-profile-panel-wide">
       <div class="candidate-profile-copy">
@@ -27,14 +36,17 @@
   {% endif %}
 
   {% if applications %}
-    <section class="candidate-profile-layout">
+    <section class="candidate-profile-layout employer-applications-grid">
       {% for application in applications %}
-        <article class="candidate-profile-panel candidate-application-card">
+        <article class="candidate-profile-panel candidate-application-card employer-application-card">
           <div class="candidate-application-card-head">
             <div>
               <h2 class="candidate-application-title">{{ application.full_name }}</h2>
               <p class="candidate-application-company">
-                {{ application.phone if application.phone else 'Phone not provided' }}
+                Phone: {{ application.phone if application.phone else 'Phone not provided' }}
+              </p>
+              <p class="candidate-application-company">
+                Email: {{ application.email if application.email else 'Email not provided' }}
               </p>
             </div>
 
@@ -112,11 +124,6 @@
 
         <div class="candidate-profile-copy">
 
-            <h3 class="candidate-application-note-title">Job Description Preview</h3>
-            <div class="application-preview-text">
-            {{ application.job_description if application.job_description else 'No description provided.' }}
-            </div>
-
             <h3 class="candidate-application-note-title">Candidate Work Experience</h3>
             <div class="application-preview-text">
             {{ application.work_experience if application.work_experience else 'No work experience provided.' }}
@@ -126,6 +133,7 @@
             <div class="application-preview-text">
             {{ application.cover_letter if application.cover_letter else 'No cover letter submitted.' }}
             </div>
+
         </div>
 
           {% if application.status != 'withdrawn' %}
@@ -140,6 +148,7 @@
                 <select name="status" class="application-status-select">
                     <option value="pending" {% if application.status == 'pending' %}selected{% endif %}>Pending</option>
                     <option value="reviewed" {% if application.status == 'reviewed' %}selected{% endif %}>Reviewed</option>
+                    <option value="contacted" {% if application.status == 'contacted' %}selected{% endif %}>Contacted</option>
                     <option value="accepted" {% if application.status == 'accepted' %}selected{% endif %}>Accepted</option>
                     <option value="rejected" {% if application.status == 'rejected' %}selected{% endif %}>Rejected</option>
                 </select>

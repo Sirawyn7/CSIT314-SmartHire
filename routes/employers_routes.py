@@ -136,7 +136,7 @@ class EmployerRoutes:
             return redirect(url_for("employer.dashboard"))
 
         status = (request.form.get("status") or "").strip().lower()
-        allowed_statuses = {"pending", "reviewed", "rejected", "accepted"}
+        allowed_statuses = {"pending", "reviewed", "contacted", "rejected", "accepted"}
         if status not in allowed_statuses:
             return redirect(url_for("employer.dashboard"))
 
