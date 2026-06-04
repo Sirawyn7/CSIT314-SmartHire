@@ -80,3 +80,11 @@ class UsersDatabase:
             "SELECT password_hash FROM users WHERE id = ?", (user_id,)
         ).fetchone()
         return row["password_hash"] if row else None
+    
+    def set_member_status(self, user_id, status):
+        """Sets the is_member flag for a user to the given status (1 or 0)."""
+        self.conn.execute(
+            "UPDATE users SET is_member = ? WHERE id = ?",
+            (status, user_id)
+        )
+        self.conn.commit()
