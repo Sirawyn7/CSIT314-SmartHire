@@ -2151,3 +2151,73 @@ body.modal-open {
 .employer-application-card .application-preview-text {
   min-height: 62px;
 }
+
+.job-mgmt-deactivate-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.45);
+}
+
+.job-mgmt-deactivate-dialog {
+  width: 90%;
+  max-width: 420px;
+  padding: 2rem;
+  border-radius: 0.75rem;
+  background: var(--color-surface, #fff);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.18);
+}
+
+.job-mgmt-deactivate-title {
+  margin: 0 0 0.75rem 0;
+  font-size: 1.1rem;
+  color: var(--color-text, #111827);
+}
+
+.job-mgmt-deactivate-copy {
+  margin: 0 0 1.5rem 0;
+  color: var(--color-text-muted, #64748b);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.job-mgmt-deactivate-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+}
+
+.job-mgmt-deactivate-cancel {
+  padding: 0.5rem 1.2rem;
+  border: 1px solid var(--color-border, #e2e8f0);
+  border-radius: 0.5rem;
+  background: transparent;
+  color: var(--color-text, #111827);
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.job-mgmt-deactivate-confirm {
+  padding: 0.5rem 1.2rem;
+  border: none;
+  border-radius: 0.5rem;
+  background: var(--color-danger-cta, #a12c7b);
+  color: #fff;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.job-mgmt-deactivate-confirm:hover {
+  background: var(--color-danger-cta-hover, #7d1e5e);
+}
+
+.employer-dashboard-job-heading {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}

@@ -30,13 +30,13 @@
 {% endif %}
 
 <!-- Deactivation Confirmation Modal -->
-<div id="deactivate-modal" style="display:none; position:fixed; inset:0; z-index:1000; background:rgba(0,0,0,0.45); display:none; align-items:center; justify-content:center;">
-  <div style="background:var(--color-surface, #fff); border-radius:0.75rem; padding:2rem; max-width:420px; width:90%; box-shadow:0 12px 32px rgba(0,0,0,0.18);">
-    <h3 style="margin-bottom:0.75rem; font-size:1.1rem;">Deactivate Job Listing?</h3>
-    <p style="color:var(--color-text-muted, #64748b); margin-bottom:1.5rem; font-size:0.95rem;">This job will no longer appear in public listings. You can reactivate it at any time from the Historical Jobs tab.</p>
-    <div style="display:flex; gap:0.75rem; justify-content:flex-end;">
-      <button onclick="closeModal()" style="padding:0.5rem 1.2rem; border-radius:0.5rem; border:1px solid var(--color-border, #e2e8f0); background:transparent; cursor:pointer; font-size:0.9rem;">Cancel</button>
-      <button id="modal-confirm-btn" onclick="submitDeactivate()" style="padding:0.5rem 1.2rem; border-radius:0.5rem; background:var(--color-error, #a12c7b); color:#fff; border:none; cursor:pointer; font-size:0.9rem; font-weight:600;">Deactivate</button>
+<div id="deactivate-modal" class="job-mgmt-deactivate-modal">
+  <div class="job-mgmt-deactivate-dialog">
+    <h3 class="job-mgmt-deactivate-title">Deactivate Job Listing?</h3>
+    <p class="job-mgmt-deactivate-copy">This job will no longer appear in public listings. You can reactivate it at any time from the Historical Jobs tab.</p>
+    <div class="job-mgmt-deactivate-actions">
+      <button type="button" onclick="closeModal()" class="job-mgmt-deactivate-cancel">Cancel</button>
+      <button type="button" id="modal-confirm-btn" onclick="submitDeactivate()" class="job-mgmt-deactivate-confirm">Deactivate</button>
     </div>
   </div>
 </div>
@@ -69,8 +69,14 @@
         {% for job in active_jobs %}
           <article class="employer-dashboard-job-card">
             <div class="employer-dashboard-job-top">
-              <h3 class="employer-dashboard-job-title">{{ job.title }}</h3>
-              <span class="employer-dashboard-job-status">Active</span>
+              <div class="employer-dashboard-job-heading">
+                <h3 class="employer-dashboard-job-title">{{ job.title }}</h3>
+                <span class="employer-dashboard-job-status">Active</span>
+              </div>
+
+              <form class="deactivate-form" data-action="{{ url_for('employer.deactivate_job', job_id=job.id) }}">
+                <button type="button" class="job-mgmt-deactivate-confirm" onclick="openModal(this)">Deactivate</button>
+              </form>
             </div>
             <p class="employer-dashboard-job-meta">
               {{ job.location if job.location else 'Location not provided' }}
@@ -82,13 +88,11 @@
             <div class="job-mgmt-actions">
               <div class="job-mgmt-actions-row">
                 <a href="{{ url_for('jobs.job_details_page', job_id=job.id) }}" class="btn-view">View</a>
-                <form class="deactivate-form" data-action="{{ url_for('employer.deactivate_job', job_id=job.id) }}">
-                  <button type="button" class="btn btn-danger" onclick="openModal(this)">Deactivate</button>
-                </form>
                 <a href="{{ url_for('employer.job_applications_page', job_id=job.id) }}" class="btn-view">View Applications</a>
+                <a href="{{ url_for('recommendations.employer_recommendations', job_id=job.id) }}" class="btn-view">Recommended Candidates</a>
               </div>
               <div class="job-mgmt-actions-row">
-                <a href="{{ url_for('recommendations.employer_recommendations', job_id=job.id) }}" class="btn-view">Recommended Candidates</a>
+                
               </div>
             </div>
           </article>
