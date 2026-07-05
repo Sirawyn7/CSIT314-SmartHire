@@ -12,6 +12,7 @@ from routes import route_classes
 from config import SECRET_KEY, MEMBERSHIP_CHECK_HOUR
 from core.membership_core import MembershipManager
 
+#-----------
 class Server:
 
     #Singleton design principle used to ensure that only 1 server is ever created at a time
